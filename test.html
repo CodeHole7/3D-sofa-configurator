@@ -24,7 +24,6 @@
 		</style>
 	</head>
 	<body>
-
 		<div id="info">
 		</div>
 
@@ -149,8 +148,8 @@
 				document.addEventListener( 'mousedown', onDocumentMouseDown, false );
 				document.addEventListener( 'touchstart', onDocumentTouchStart, false );
 				document.addEventListener( 'touchmove', onDocumentTouchMove, false );
-				document.addEventListener( 'keypress', onDocumentKeyPress, false );
-				document.addEventListener( 'keydown', onDocumentKeyDown, false );
+				// document.addEventListener( 'keypress', onDocumentKeyPress, false );
+				// document.addEventListener( 'keydown', onDocumentKeyDown, false );
 				
 				//
 				window.addEventListener( 'resize', onWindowResize, false );
@@ -167,33 +166,8 @@
 			}
 			function updatePermalink() {
 				var link = hex + fontMap[ fontName ] + weightMap[ fontWeight ] + boolToNum( bevelEnabled ) + "#" + encodeURI( text );
-				permalink.href = "#" + link;
-				window.location.hash = link;
-			}
-			function onDocumentKeyDown( event ) {
-				if ( firstLetter ) {
-					firstLetter = false;
-					text = "";
-				}
-				var keyCode = event.keyCode;
-				// backspace
-				if ( keyCode == 8 ) {
-					event.preventDefault();
-					text = text.substring( 0, text.length - 1 );
-					refreshText();
-					return false;
-				}
-			}
-			function onDocumentKeyPress( event ) {
-				var keyCode = event.which;
-				// backspace
-				if ( keyCode == 8 ) {
-					event.preventDefault();
-				} else {
-					var ch = String.fromCharCode( keyCode );
-					text += ch;
-					refreshText();
-				}
+				// permalink.href = "#" + link;
+				// window.location.hash = link;
 			}
 			function loadFont() {
 				var loader = new THREE.FontLoader();

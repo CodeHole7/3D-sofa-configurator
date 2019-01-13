@@ -1,0 +1,49 @@
+body {
+    overflow: hidden;
+}
+
+#category-list{
+    width : 80%;
+    margin-left: 10%;
+    margin-top: 5rem;
+    height: 600px;
+    overflow-y : scroll;
+    border : 1px solid #dddddd;
+}
+
+.category-item {
+    cursor: pointer;
+    display : inline-block;
+    width: 33%;
+}
+
+.category-item .title{
+    text-align: center;
+    font-size: 30px;
+    margin: 0;
+}
+
+.category-item .description{
+    text-align: center;
+    font-size: 20px;
+    margin: 0;
+    color: gray;
+}
+
+#sofa-config-panel{
+    width : 80%;
+    margin-left: 10%;
+    margin-top: 5rem;
+    overflow : hidden;
+}
+
+#sofa-config-panel .btn-back{
+    cursor: pointer;
+    color: gray;
+}
+
+#sofa-config-panel #info{
+    width : 99%;
+    height : 600px;
+    border : 1px solid #dddddd;
+}
