@@ -1,5 +1,5 @@
 body {
-    overflow: hidden;
+    margin: 0;
 }
 
 #category-list{
@@ -35,6 +35,7 @@ body {
     margin-left: 10%;
     margin-top: 5rem;
     overflow : hidden;
+    position: relative;
 }
 
 #sofa-config-panel .btn-back{
@@ -42,8 +43,277 @@ body {
     color: gray;
 }
 
-#sofa-config-panel #info{
-    width : 99%;
+#sofa-config-panel #canvasSofa{
+    width : 100%;
     height : 600px;
     border : 1px solid #dddddd;
+}
+
+#sofa-config-panel .side-drawer{
+    position: absolute;
+    top: 60px;
+    right: 0;
+    background: white;
+    width: 300px;
+    height: 600px;
+    padding: 0 1.5rem;
+}
+
+#sofa-config-panel .side-drawer.expanded{
+    right: 0;
+    transition: .3s
+}
+
+#sofa-config-panel .side-drawer.collapsed{
+    right : -335px;
+    transition: .3s;
+}
+
+#sofa-config-panel .side-drawer .toggle-collapse{
+    position: absolute;
+    background: white;
+    width: 60px;
+    height: 60px;
+    top: 270px;
+    left: -32px;
+    border-radius: 30px;
+    cursor: pointer;
+}
+
+#sofa-config-panel .side-drawer .toggle-collapse.expanded::before{
+    content: " ";
+    position: absolute;
+    width: 3px;
+    height: 24px;
+    background: gray;
+    transform: rotateZ(-45deg);
+    top: 10px;
+    left: 28px;
+}
+
+#sofa-config-panel .side-drawer .toggle-collapse.expanded::after{
+    content: " ";
+    position: absolute;
+    width: 3px;
+    height: 24px;
+    background: gray;
+    transform: rotateZ(45deg);
+    top: 25px;
+    left: 28px; 
+}
+
+#sofa-config-panel .side-drawer .toggle-collapse.collapsed::before{
+    content: " ";
+    position: absolute;
+    width: 3px;
+    height: 24px;
+    background: gray;
+    transform: rotateZ(45deg);
+    top: 10px;
+    left: 24px;
+}
+
+#sofa-config-panel .side-drawer .toggle-collapse.collapsed::after{
+    content: " ";
+    position: absolute;
+    width: 3px;
+    height: 24px;
+    background: gray;
+    transform: rotateZ(-45deg);
+    top: 25px;
+    left: 24px; 
+}
+
+#select-type .single-component{
+    display: inline-block;
+    margin: 1rem 2rem;
+    cursor: pointer;
+    padding: 0 1rem;
+}
+
+#select-type .single-component:hover{
+    background: #dddddd;
+    transition: .7s;
+}
+
+.custom-nav{
+
+}
+
+.custom-nav .custom-nav-item{
+    display: inline-block;
+    width: 32.5%;
+    background: gray;
+    text-align: center;
+    color: white;
+    padding: 1rem 0;
+    text-transform: uppercase;
+    cursor: pointer;
+}
+
+.custom-nav .custom-nav-item:hover{
+    background-color: #333333;
+    transition: .7s;
+}
+.custom-nav .custom-nav-item.active{
+    background-color: white;
+    color: gray;
+    transition: .7s;
+}
+
+.side-drawer-content{
+    display: none;
+    height: 600px;
+    overflow-y: auto;
+}
+
+.side-drawer-content.active{
+    display: block;
+}
+.btn{
+    text-align: center;
+    background-color: gray;
+    color: white;
+    text-transform: uppercase;
+    font-size: 18px;
+    padding: .5rem 0;
+    margin: 1rem;
+    cursor: pointer;
+}
+
+.btn:hover{
+    background: #333333;
+    transition: .4s;
+}
+
+.custom-dropdown{
+
+}
+
+.custom-dropdown.expanded .custom-dropdown-content{
+    display: block;
+}
+
+.custom-dropdown.collapsed .custom-dropdown-content{
+    display: none;
+}
+
+.custom-dropdown-header{
+    border: 1px solid #dddddd;
+    border-radius: 3px;
+    padding: 0.5rem 1rem;
+    position: relative;
+    cursor: pointer;
+}
+
+.custom-dropdown-header h3{
+    margin: 0;
+}
+
+.custom-dropdown.expanded .custom-dropdown-header::before{
+    position: absolute;
+    content: " ";
+    width: 2px;
+    height: 18px;
+    background-color: gray;
+    right: 28px;
+    top: 11px;
+    transform-origin: center center;
+    transform: rotateZ(45deg);
+}
+
+.custom-dropdown.expanded .custom-dropdown-header::after{
+    position: absolute;
+    content: " ";
+    width: 2px;
+    height: 18px;
+    background-color: gray;
+    right: 16px;
+    top: 11px;
+    transform-origin: center center;
+    transform: rotateZ(-45deg);
+}
+
+.custom-dropdown.collapsed .custom-dropdown-header::before{
+    position: absolute;
+    content: " ";
+    width: 2px;
+    height: 18px;
+    background-color: gray;
+    right: 28px;
+    top: 11px;
+    transform-origin: center center;
+    transform: rotateZ(-45deg);
+}
+
+.custom-dropdown.collapsed .custom-dropdown-header::after{
+    position: absolute;
+    content: " ";
+    width: 2px;
+    height: 18px;
+    background-color: gray;
+    right: 16px;
+    top: 11px;
+    transform-origin: center center;
+    transform: rotateZ(45deg);
+}
+
+.custom-dropdown-content .content-item{
+    display: inline-block;
+    width: 29.4%;
+    margin: 4px;
+    cursor: pointer;
+}
+
+.custom-dropdown-content .content-item.active img{
+    border: 3px solid #f43367;
+}
+
+.select-color-item{
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+    border-radius: 25px;
+    background: gray;
+    margin: 2px;
+    border: 2px solid #555555;
+}
+
+.select-color-item.active{
+    border: 2px solid black;
+    margin: 2px;
+}
+
+.select-color-item .tooltip{
+    position: absolute;
+    display: none;
+    background-color: #333333;
+    color: white;
+    padding: 8px;
+    z-index: 1000;
+    top: 44px;
+    left: -17.5px;
+    width: 70px;
+    text-align: center;
+}
+
+.select-color-item .tooltip::before{
+    position: absolute;
+    content: " ";
+    width: 15px;
+    height: 15px;
+    left: 36px;
+    top: -7px;
+    background-color: #333;
+    transform: rotateZ(45deg);
+}
+
+.select-color-item:hover .tooltip{
+    display: block;
+}
+
+#color-selector{
+    padding: 1rem;
 }

@@ -7,7 +7,7 @@ var rectLight;
 var param = {};
 var stats;
 init();
-animate();
+// animate();
 function init() {
     renderer = new THREE.WebGLRenderer( { antialias: true } );
     renderer.setPixelRatio( window.devicePixelRatio );

@@ -12,8 +12,9 @@
 		<script src="assets/js/vendor/webGL/dat.gui.min.js"></script>
 		<script src="assets/js/vendor/webGL/stats.min.js"></script>
 		<script src="assets/js/vendor/webGL/WebGL.js"></script>
+		<script src="assets/js/vendor/webGL/loader/TDSLoader.js"></script>
 
-		<script src="assets/js/jquery/jquery.min.js"></script>
+		<script src="assets/js/vendor/jquery/jquery.min.js"></script>
 	</head>
 	<body>
 		<div id="category-list">
@@ -21,9 +22,62 @@
 		</div>
 		<div id="sofa-config-panel">
 			<h3 class="btn-back">Back</h3>
-			<div id="info"></div>
+			<div id="canvasSofa"></div>
+			<div class='side-drawer expanded'>
+				<span class="toggle-collapse expanded"></span>
+				<div class='side-drawer-content active' data-cat='setup'>
+					<h2>Set up</h2>
+					<div class="btn btn-add-element">Add Element</div>
+					<div class="btn btn-delete-all-element">Delete All Element</div>
+				</div>
+				<div class='side-drawer-content' data-cat='covering'>
+					<h2>Covering</h2>
+					<div id='select-covering'>
+						<div class='custom-dropdown expanded'>
+							<div class='custom-dropdown-header'>
+								<h3>Leather</h3>
+							</div>
+							<div class="custom-dropdown-content">
+								<div class='content-item corvering' data-texture="F-006-103">
+									<img src="texture/F-006-103-thumb.jpg" width="100%">
+								</div>
+								<div class='content-item corvering' data-texture="I-101">
+									<img src="texture/I-101-thumb.jpg" width="100%">
+								</div>
+								<div class='content-item corvering' data-texture="R-1562">
+									<img src="texture/R-1562-thumb.jpg" width="100%">
+								</div>
+								<div class='content-item corvering' data-texture="leather-01">
+									<img src="texture/leather-01-thumb.jpg" width="100%">
+								</div>
+							</div>
+						</div>
+						<div class='custom-dropdown collapsed'>
+							<div class='custom-dropdown-header'>
+								<h3>Colors</h3>
+							</div>
+							<div class="custom-dropdown-content">
+								<div id="color-selector">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class='side-drawer-content' data-cat='final'>
+					<h2>Final</h2>
+				</div>
+			</div>
+			<div class='custom-nav'>
+				<div class='custom-nav-item active' data-cat='setup'>Set up</div>
+				<div class='custom-nav-item' data-cat='covering'>Covering</div>
+				<div class='custom-nav-item final' data-cat="final">Your model</div>
+			</div>
+			<div id="select-type">
+
+			</div>
 		</div>
 		<script src="assets/js/script.js"></script>
 		<script src="assets/js/sofa-configurator.js"></script>
+		<!-- <script src="assets/js/main-engine.js"></script> -->
 	</body>
 </html>
