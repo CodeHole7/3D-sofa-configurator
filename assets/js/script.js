@@ -58,8 +58,43 @@ const lstCategory = [
             },
         ]
     },
+    {
+        name : "LV8019",
+        thumbImage : 'images/jori-sophia.jpg',
+        description : "Verhaert New Products & Services",
+        components : [
+            {
+                name : "LV8019 1",
+                data : "LV8019-01.3DS"
+            },
+            {
+                name : "LV8019 2",
+                data : "LV8019-02.3DS"
+            },
+            {
+                name : "LV8019 3",
+                data : "LV8019-03.3DS"
+            },
+            {
+                name : "LV8019 4",
+                data : "LV8019-04.3DS"
+            },
+            {
+                name : "LV8019 5",
+                data : "LV8019-05.3DS"
+            },
+            {
+                name : "LV8019 6",
+                data : "LV8019-06.3DS"
+            },
+        ]
+    },
 ];
 const lstColor = [
+    {
+        color : "000000",
+        name : "Black"
+    },
     {
         color : "f43838",
         name : "Red"

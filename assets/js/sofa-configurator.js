@@ -33,6 +33,7 @@ function loadTexture(texture){
     );
 
     setTimeout(() => {
+        // console.log('texture image test',textureImage);
         textureImage.wrapS = THREE.RepeatWrapping;
         textureImage.wrapT = THREE.RepeatWrapping;
 
@@ -114,15 +115,21 @@ var SofaConfigurator = function(item){
     //add all colors
     for(var i in lstColor){
         var item = lstColor[i];
-        $('#color-selector').append(
+        $('#primary-color-selector').append(
+            "<div class='select-color-item' style='background-color : #"+item.color+"' data-color='"+item.color+"'>"+
+            "<span class='tooltip'>"+item.name+"</span>"+
+            "</div>"
+        );
+        $('#secondary-color-selector').append(
             "<div class='select-color-item' style='background-color : #"+item.color+"' data-color='"+item.color+"'>"+
             "<span class='tooltip'>"+item.name+"</span>"+
             "</div>"
         );
     }
 
-    //add color selection event listeners
-    $('.select-color-item').click(function(){
+    //add primary color selection event listeners
+    $('#primary-color-selector .select-color-item').click(function(){
+        console.log('primary color selected')
         $(this).parent().find('.select-color-item').each(function(){
             $(this).removeClass('active');
         })
@@ -131,11 +138,41 @@ var SofaConfigurator = function(item){
         console.log(color)
         for(var i in lstElement){
             var item = lstElement[i].model;
-            //material.color.set(0xff0000);
             for(var j in item.children){
-                item.children[j].material.color.set('#'+color);
-                item.children[j].material.map = null;
-                item.children[j].material.needsUpdate = true;
+                if(item.children[j].name.includes('CG-1') == true)
+                {
+                    var newMat = item.children[j].material.clone();
+                    newMat.color.set('#'+color);
+                    newMat.map = null;
+                    newMat.needsUpdate = true;
+
+                    item.children[j].material = newMat;
+                    console.log('new mat updated')
+                }
+            }
+        }
+    })
+    $('#secondary-color-selector .select-color-item').click(function(){
+        // console.log('secondary color selected');
+        $(this).parent().find('.select-color-item').each(function(){
+            $(this).removeClass('active');
+        })
+        $(this).addClass('active');
+        var color = $(this).data('color');
+        console.log(color)
+        for(var i in lstElement){
+            var item = lstElement[i].model;
+            for(var j in item.children){
+                if(item.children[j].name.includes('CG-2') == true)
+                {
+                    var newMat = item.children[j].material.clone();
+                    newMat.color.set('#'+color);
+                    newMat.map = null;
+                    newMat.needsUpdate = true;
+
+                    item.children[j].material = newMat;
+                    console.log('new mat updated')
+                }
             }
         }
     })
