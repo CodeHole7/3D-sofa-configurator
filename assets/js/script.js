@@ -145,88 +145,164 @@ const lstCategory = [
 
 const lstColor = [
     {
-        color : "000000",
-        name : "Black"
+        category : "F-006",
+        color : "d24d02",
+        name : "F-006-101"
     },
     {
-        color : "f43838",
-        name : "Red"
+        category : "F-006",
+        color : "715b60",
+        name : "F-006-102"
     },
     {
-        color : "38f438",
-        name : "Green"
+        category : "F-006",
+        color : "2d2e4a",
+        name : "F-006-103"
     },
     {
-        color : "3838f4",
-        name : "Blue"
+        category : "F-006",
+        color : "62280d",
+        name : "F-006-104"
     },
     {
-        color : "858585",
-        name : "Gray"
+        category : "F-006",
+        color : "b0704b",
+        name : "F-006-105"
     },
     {
-        color : "6D305B",
-        name : "Palatinate Purple"
+        category : "F-006",
+        color : "aa8e7f",
+        name : "F-006-107"
     },
     {
-        color : "835284",
-        name : "Razzmic Berry"
+        category : "F-006",
+        color : "605b7b",
+        name : "F-006-116"
     },
     {
-        color : "FEFAEC",
-        name : "Floral White"
+        category : "F-006",
+        color : "961d07",
+        name : "F-006-117"
     },
     {
-        color : "F7EDC2",
-        name : "Lemon Meringue"
+        category : "F-006",
+        color : "7a0303",
+        name : "F-006-120"
     },
     {
-        color : "E6C26B",
-        name : "Arylide Yellow"
+        category : "F-006",
+        color : "331c22",
+        name : "F-006-122"
     },
     {
-        color : "602812",
-        name : "Seal Brown"
+        category : "F-006",
+        color : "131016",
+        name : "F-006-124"
     },
     {
-        color : "803516",
-        name : "Kobe"
+        category : "F-006",
+        color : "8a0e02",
+        name : "F-006-202"
     },
     {
-        color : "FBE6B1",
-        name : "Banana Mania"
+        category : "F-006",
+        color : "151d1c",
+        name : "F-006-206"
     },
     {
-        color : "FDD06C",
-        name : "Orange-Yellow (Crayola)"
+        category : "F-008",
+        color : "7a4c26",
+        name : "F-008-101"
     },
     {
-        color : "F5983B",
-        name : "Royal Orange"
+        category : "F-008",
+        color : "421a11",
+        name : "F-008-102"
     },
     {
-        color : "EB671C",
-        name : "Halloween Orange"
+        category : "F-008",
+        color : "815801",
+        name : "F-008-201"
     },
     {
-        color : "ACC1FF",
-        name : "Baby Blue Eyes"
+        category : "F-008",
+        color : "af5c1c",
+        name : "F-008-203"
     },
     {
-        color : "C7EEFF",
-        name : "Diamond"
+        category : "F-008",
+        color : "891c05",
+        name : "F-008-204"
     },
     {
-        color : "FFAEAE",
-        name : "Melon"
+        category : "F-008",
+        color : "7e6061",
+        name : "F-008-206"
     },
     {
-        color : "FFEC94",
-        name : "Flavescent"
+        category : "F-008",
+        color : "6b1700",
+        name : "F-008-401"
     },
     {
-        color : "B0E57C",
-        Name: "Yellow-Green (Crayola)"
+        category : "F-008",
+        color : "3f0305",
+        name : "F-008-403"
+    },
+    {
+        category : "F-008",
+        color : "501b08",
+        name : "F-008-406"
+    },
+    {
+        category : "F-018",
+        color : "121015",
+        name : "F-018-101"
+    },
+    {
+        category : "F-018",
+        color : "8d706d",
+        name : "F-018-102"
+    },
+    {
+        category : "F-018",
+        color : "9a3d03",
+        name : "F-018-106"
+    },
+    {
+        category : "F-018",
+        color : "a45b32",
+        name : "F-018-114"
+    },
+    {
+        category : "F-018",
+        color : "c54100",
+        name : "F-018-133"
+    },
+    {
+        category : "F-018",
+        color : "a91913",
+        name : "F-018-134"
+    },
+    {
+        category : "F-018",
+        color : "480f08",
+        name : "F-018-135"
+    },
+    {
+        category : "F-018",
+        color : "47151b",
+        name : "F-018-137"
+    },
+    {
+        category : "F-018",
+        color : "101453",
+        name : "F-018-138"
+    },
+    {
+        category : "F-018",
+        color : "46271c",
+        name : "F-018-142"
     },
 ]
 //example data end

@@ -333,6 +333,10 @@ body {
     border: 2px solid #555555;
 }
 
+.select-color-item.hidden{
+    display: none;
+}
+
 .select-color-item.active{
     border: 2px solid black;
     margin: 2px;
@@ -368,5 +372,5 @@ body {
 }
 
 #color-selector{
-    padding: 1rem;
+    /*padding: 1rem;*/
 }
