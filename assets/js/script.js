@@ -146,6 +146,11 @@ const lstCategory = [
 const lstColor = [
     {
         category : "F-006",
+        color : "030303",
+        name : "F-006-100"
+    },
+    {
+        category : "F-006",
         color : "d24d02",
         name : "F-006-101"
     },
@@ -211,6 +216,11 @@ const lstColor = [
     },
     {
         category : "F-008",
+        color : "030303",
+        name : "F-008-100"
+    },
+    {
+        category : "F-008",
         color : "7a4c26",
         name : "F-008-101"
     },
@@ -253,6 +263,11 @@ const lstColor = [
         category : "F-008",
         color : "501b08",
         name : "F-008-406"
+    },
+    {
+        category : "F-018",
+        color : "030303",
+        name : "F-018-100"
     },
     {
         category : "F-018",

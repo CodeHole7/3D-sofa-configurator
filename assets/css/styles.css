@@ -331,6 +331,37 @@ body {
     background: gray;
     margin: 2px;
     border: 2px solid #555555;
+    vertical-align: top;
+}
+
+.select-color-item.one::before{
+    content: "1";
+    position: absolute;
+    width: 48px;
+    height: 48px;
+    border-radius: 24px;
+    background: rgba(255,255,255,.5);
+    border: 2px solid #00a2e8;
+    top: -2px;
+    left: -2px;
+    font-size: 40px;
+    color: #00a2e8;
+    text-align: center;
+}
+
+.select-color-item.two::before{
+    content: "2";
+    position: absolute;
+    width: 48px;
+    height: 48px;
+    border-radius: 24px;
+    background: rgba(255,255,255,.5);
+    border: 2px solid #00a2e8;
+    top: -2px;
+    left: -2px;
+    font-size: 40px;
+    color: #00a2e8;
+    text-align: center;
 }
 
 .select-color-item.hidden{

@@ -2,6 +2,7 @@ var SofaConfigurator = function(item){
     var lstElement = [];
     var undoManager = new UndoManager();
     var fullItemList = item.components;
+    var lstCubeCameras = [];
 
     ////////////////////////////////////////////
     //Initialize DOM
@@ -57,6 +58,10 @@ var SofaConfigurator = function(item){
             object.castShadow = true;
             object.name = name + '-' + Date().toString().replace(/\s/g, '');
             
+            var bbox = new THREE.Box3().setFromObject(object);
+            
+            object.boundingBox = bbox;
+            
             //set default material to object
             for(var j in object.children){
                 object.children[j].castShadow = true;
@@ -70,16 +75,22 @@ var SofaConfigurator = function(item){
                     });
                 }
                 else if(object.children[j].name.includes('metal')){
-                    console.log('create metal material')
-                    
-                    var envMap = new THREE.TextureLoader().load('texture/chrome2.jpg');
-                    envMap.mapping = THREE.SphericalReflectionMapping;
-                    
-                    object.children[j].material = new THREE.MeshStandardMaterial({
+                    var tmpBBox = new THREE.Box3().setFromObject(object.children[j])
+
+                    cubeCamera = new THREE.CubeCamera(  1, 100000, 128 );
+                    cubeCamera.renderTarget.texture.generateMipmaps = true;
+                    cubeCamera.renderTarget.texture.minFilter = THREE.LinearMipMapLinearFilter;
+                    cubeCamera.position.set((tmpBBox.max.x + tmpBBox.min.x)/2 ,-(tmpBBox.max.z + tmpBBox.min.z)/2,(tmpBBox.min.y + tmpBBox.max.y)/2);
+
+                    object.add(cubeCamera);
+                    cubeCamera.update(renderer,scene);
+                    lstCubeCameras.push(cubeCamera);
+
+                    object.children[j].material = new THREE.MeshLambertMaterial({
                         color : 'white',
-                        roughness : 0,
-                        envMap : envMap
-                        // envMap : cubeCamera1.renderTarget.texture
+                        // envMap : envMap
+                        envMap : cubeCamera.renderTarget.texture,
+                        reflectivity : 0.9,
                     })
                     console.log(object.children[j].material)
                 }
@@ -98,10 +109,7 @@ var SofaConfigurator = function(item){
                 }
             }
 
-            var bbox = new THREE.Box3().setFromObject(object);
             
-            object.boundingBox = bbox;
-
             //add sprites for control handlers
             //sprite for rotate
             var spriteRotateMap = new THREE.TextureLoader().load( 'texture/sprite-rotate.png' );
@@ -407,7 +415,6 @@ var SofaConfigurator = function(item){
             
             for(var i in lstElement){
                 var item = lstElement[i].model;
-                console.log(lstElement[i].model.children)
                 for(var j in item.children){
                     if(item.children[j] instanceof THREE.Mesh && item.children[j].name.includes('metal') == false && item.children[j].name.includes('glass') == false)
                         item.children[j].material = textureMaterial;
@@ -488,83 +495,86 @@ var SofaConfigurator = function(item){
         if(oneColorSelected == false){
             //select primary color
             if($(this).hasClass('two') != true)
+            {
                 $(this).addClass('one');
+                setPrimaryColor($(this).data('color'));
+            }
         }
         else if($(this).hasClass('one')){
             $(this).removeClass('one');
         }
         if(oneColorSelected == true && twoColorSelected == false){
-            $(this).addClass('two');
+
+            //select secondary color
+            if($(this).hasClass('one') != true)
+            {
+                $(this).addClass('two');
+                setSecondaryColor($(this).data('color'));
+            }
         }
         else if($(this).hasClass('two')){
             $(this).removeClass('two');
         }
-
-        // $(this).addClass('active');
-        // var color = $(this).data('color');
-        // var beforeLstElement =[];
-        // for(var i in lstElement){
-        //     var item = lstElement[i].model;
-        //     beforeLstElement[i] = [];
-        //     for(var j in item.children){
-        //         beforeLstElement[i][j] = item.children[j].material
-        //     }
-        // }
-        // for(var i in lstElement){
-        //     var item = lstElement[i].model;
-        //     for(var j in item.children){
-        //         if(item.children[j].name.includes('CG-1') == true)
-        //         {
-        //             var newMat = item.children[j].material.clone();
-        //             newMat.color.set('#'+color);
-        //             newMat.map = null;
-        //             newMat.needsUpdate = true;
-
-        //             item.children[j].material = newMat;
-        //         }
-        //     }
-        // }
         
-        // ////////////////////////////////////////////////
-        // //add to undoManager
-        // ////////////////////////////////////////////////
-        // undoManager.add({
-        //     undo : function(){
-        //         for(var i in lstElement){
-        //             var item = lstElement[i].model;
-        //             for(var j in item.children){
-        //                 if(item.children[j].name.includes('CG-1') == true)
-        //                 {
-        //                     item.children[j].material = beforeLstElement[i][j];
-        //                 }
-        //             }
-        //         }
-        //     },
-        //     redo : function(){
-        //         for(var i in lstElement){
-        //             var item = lstElement[i].model;
-        //             for(var j in item.children){
-        //                 if(item.children[j].name.includes('CG-1') == true)
-        //                 {
-        //                     var newMat = item.children[j].material.clone();
-        //                     newMat.color.set('#'+color);
-        //                     newMat.map = null;
-        //                     newMat.needsUpdate = true;
-        
-        //                     item.children[j].material = newMat;
-        //                 }
-        //             }
-        //         }
-        //     }
-        // })
     })
-    $('#secondary-color-selector .select-color-item').click(function(){
-        $(this).parent().find('.select-color-item').each(function(){
-            $(this).removeClass('active');
-        })
-        $(this).addClass('active');
-        var color = $(this).data('color');
+    function setPrimaryColor(color){
+        var beforeLstElement =[];
+        for(var i in lstElement){
+            var item = lstElement[i].model;
+            beforeLstElement[i] = [];
+            for(var j in item.children){
+                beforeLstElement[i][j] = item.children[j].material
+            }
+        }
+        for(var i in lstElement){
+            var item = lstElement[i].model;
+            for(var j in item.children){
+                if(item.children[j].name.includes('CG-1') == true)
+                {
+                    var newMat = item.children[j].material.clone();
+                    newMat.color.set('#'+color);
+                    newMat.map = null;
+                    newMat.needsUpdate = true;
+
+                    item.children[j].material = newMat;
+                }
+            }
+        }
         
+        ////////////////////////////////////////////////
+        //add to undoManager
+        ////////////////////////////////////////////////
+        undoManager.add({
+            undo : function(){
+                for(var i in lstElement){
+                    var item = lstElement[i].model;
+                    for(var j in item.children){
+                        if(item.children[j].name.includes('CG-1') == true)
+                        {
+                            item.children[j].material = beforeLstElement[i][j];
+                        }
+                    }
+                }
+            },
+            redo : function(){
+                for(var i in lstElement){
+                    var item = lstElement[i].model;
+                    for(var j in item.children){
+                        if(item.children[j].name.includes('CG-1') == true)
+                        {
+                            var newMat = item.children[j].material.clone();
+                            newMat.color.set('#'+color);
+                            newMat.map = null;
+                            newMat.needsUpdate = true;
+        
+                            item.children[j].material = newMat;
+                        }
+                    }
+                }
+            }
+        })
+    }
+    function setSecondaryColor(color){
         var beforeLstElement =[];
         for(var i in lstElement){
             var item = lstElement[i].model;
@@ -620,9 +630,8 @@ var SofaConfigurator = function(item){
                 }
             }
         })
-    })
+    }
     
-
     //main webGL engine
     if ( WEBGL.isWebGLAvailable() === false ) {
         document.body.appendChild( WEBGL.getWebGLErrorMessage() );
@@ -694,16 +703,16 @@ var SofaConfigurator = function(item){
         //create reflection camera
         cubeCamera1 = new THREE.CubeCamera(  1, 100000, 128 );
         cubeCamera1.position.set(0 ,500,0);
-
-        // var geoBox = new THREE.BoxBufferGeometry(100,100,100);
-        // var mshBox = new THREE.Mesh(geoBox, new THREE.MeshStandardMaterial({color : 'red'}));
-        // mshBox.position.set(0,500,0);
-        // scene.add(mshBox);
         
         cubeCamera1.renderTarget.texture.generateMipmaps = true;
         cubeCamera1.renderTarget.texture.minFilter = THREE.LinearMipMapLinearFilter;
-        console.log(cubeCamera1);
         scene.add(cubeCamera1);
+
+        // var geometry = new THREE.SphereGeometry( 200, 32, 32 );
+        // var material = new THREE.MeshLambertMaterial( {envMap : cubeCamera1.renderTarget.texture , metalness : 0.6, roughness : 0} );
+        // var sphere = new THREE.Mesh( geometry, material );
+        // sphere.position.set(0,500,0)
+        // scene.add( sphere );
 
         //create orbit for mouse moving
         orbit = new THREE.OrbitControls( camera, renderer.domElement );
@@ -712,8 +721,8 @@ var SofaConfigurator = function(item){
         orbit.minPolarAngle = -Math.PI / 2;
         orbit.maxPolarAngle = Math.PI / 2 - 0.1;
 
-        // orbit.minDistance = 1500;
-        // orbit.maxDistance = 8000;
+        orbit.minDistance = 1000;
+        orbit.maxDistance = 8000;
 
         orbit.update();
     
@@ -995,6 +1004,8 @@ var SofaConfigurator = function(item){
     function animate() {
         requestAnimationFrame( animate );
         renderer.render( scene, camera );
-        // cubeCamera1.updateCubeMap(renderer, scene);
+        for(var i in lstCubeCameras){
+            lstCubeCameras[i].update(renderer,scene)
+        }
     }
 }
