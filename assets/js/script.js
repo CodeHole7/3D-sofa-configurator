@@ -60,7 +60,7 @@ const lstCategory = [
     },
     {
         name : "LV8019",
-        thumbImage : 'images/jori-sophia.jpg',
+        thumbImage : 'images/jori-tigra-landscape.jpg',
         description : "Verhaert New Products & Services",
         components : [
             {
@@ -271,17 +271,6 @@ $('document').ready(function(){
             $(this).parent().removeClass('expanded');
             $(this).parent().addClass('collapsed');
         }
-    })
-
-    //covering management
-    //leather management
-    $('.corvering').click(function(){
-        $(this).parent().find('.corvering').each(function(){
-            $(this).removeClass('active');
-        })
-        $(this).addClass('active');
-        console.log($(this).attr('data-texture'))
-        loadTexture($(this).data('texture'))
     })
 
 })

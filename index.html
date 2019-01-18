@@ -8,7 +8,10 @@
 
 		<script src="assets/js/vendor/webGL/three.js"></script>
 		<script src="assets/js/vendor/webGL/RectAreaLightUniformsLib.js"></script>
+
 		<script src="assets/js/vendor/webGL/OrbitControls.js"></script>
+		<script src="assets/js/vendor/webGL/TransformControls.js"></script>
+		
 		<script src="assets/js/vendor/webGL/dat.gui.min.js"></script>
 		<script src="assets/js/vendor/webGL/stats.min.js"></script>
 		<script src="assets/js/vendor/webGL/webGL.js"></script>
@@ -21,7 +24,14 @@
 			<p>Hello</p>
 		</div>
 		<div id="sofa-config-panel">
-			<h3 class="btn-back">Back</h3>
+			<div>
+				<h3 class="btn-back" style="display: inline-block;width: 49%">Back</h3>
+				<div style="display: inline-block; width: 50%; text-align: right">
+					<span class='btn-undo'>Undo</span>
+					<span class='btn-redo'>Redo</span>
+				</div>
+			</div>
+			
 			<div id="canvasSofa"></div>
 			<div class='side-drawer expanded'>
 				<span class="toggle-collapse expanded"></span>
