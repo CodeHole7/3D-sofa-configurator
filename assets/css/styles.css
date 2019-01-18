@@ -323,6 +323,7 @@ body {
     left: -17.5px;
     width: 70px;
     text-align: center;
+    pointer-events: none;
 }
 
 .select-color-item .tooltip::before{
