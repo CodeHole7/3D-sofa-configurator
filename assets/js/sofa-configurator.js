@@ -16,6 +16,7 @@ var SofaConfigurator = function(item){
         item.components.map((component,i)=>{
             $('#select-type').append(
                 "<div class='single-component' cat='"+component.data+"'>"+
+                "<img src='models/"+component.thumbImage+"' width='200px'>"+
                 "<p>"+component.name+"</p>"+
                 "</div>"
             )
@@ -51,7 +52,11 @@ var SofaConfigurator = function(item){
             for(var j in object.children){
                 object.children[j].castShadow = true;
                 object.children[j].receiveShadow = true;
-                object.children[j].material = new THREE.MeshStandardMaterial({color : 'red'});
+                object.children[j].material = new THREE.MeshStandardMaterial({
+                    color : 0xffffff,
+                    metalness : 0.4,
+                    roughness : 0.5,
+                });
             }
             //add sprites for control handlers
             //sprite for rotate
@@ -85,6 +90,7 @@ var SofaConfigurator = function(item){
             undoManager.add({
                 undo : function(){
                     scene.remove(object);
+                    control.detach();
                 },
                 redo : function(){
                     scene.add(object);
@@ -380,6 +386,8 @@ var SofaConfigurator = function(item){
     var control;
     var sceneContainer = document.getElementById('canvasSofa');
     var mouse = { x: 0, y: 0 };
+    var transformBeforeMovingPos = {x : 0, y : 0, z : 0};
+    var transformAfterMovingPos = {x : 0, y : 0, z : 0};
     
     init();
     animate();
@@ -447,9 +455,61 @@ var SofaConfigurator = function(item){
     
         //transform controls
         control = new THREE.TransformControls( camera, renderer.domElement );
+        
         control.addEventListener( 'dragging-changed', function ( event ) {
-                    orbit.enabled = ! event.value;
-                } );
+            orbit.enabled = ! event.value;
+            if(event.value == true)
+            {
+                var currentObject = control.getCurrent();
+                transformBeforeMovingPos.x = currentObject.position.x;
+                transformBeforeMovingPos.y = currentObject.position.y;
+                transformBeforeMovingPos.z = currentObject.position.z;
+                console.log('before',transformBeforeMovingPos)
+            }
+            else{
+                var currentObject = control.getCurrent();
+                transformAfterMovingPos.x = currentObject.position.x;
+                transformAfterMovingPos.y = currentObject.position.y;
+                transformAfterMovingPos.z = currentObject.position.z;
+                console.log('after',transformAfterMovingPos)
+
+                /////////////////////////////////////////////////
+                //add to undoManager
+                /////////////////////////////////////////////////
+                var localBeforePosition = {};
+                localBeforePosition.x = transformBeforeMovingPos.x;
+                localBeforePosition.y = transformBeforeMovingPos.y;
+                localBeforePosition.z = transformBeforeMovingPos.z;
+                console.log('before position',localBeforePosition);
+
+                var localAfterPosition = {};
+                localAfterPosition.x = transformAfterMovingPos.x;
+                localAfterPosition.y = transformAfterMovingPos.y;
+                localAfterPosition.z = transformAfterMovingPos.z;
+
+                undoManager.add({
+                    undo : function(){
+                        var currentObject = control.getCurrent();
+                        
+                        if(currentObject instanceof THREE.Group){
+                            currentObject.position.x = localBeforePosition.x;
+                            currentObject.position.y = localBeforePosition.y;
+                            currentObject.position.z = localBeforePosition.z;
+                        }
+                    },
+                    redo : function(){
+                        var currentObject = control.getCurrent();
+                        console.log(currentObject);
+                        if(currentObject instanceof THREE.Group){
+                            currentObject.position.x = localAfterPosition.x;
+                            currentObject.position.y = localAfterPosition.y;
+                            currentObject.position.z = localAfterPosition.z;
+                        }
+                    }
+                })
+                console.log(undoManager)
+            }
+        });
         scene.add(control);
 
         control.showY = false;
@@ -486,6 +546,7 @@ var SofaConfigurator = function(item){
                     if(item.object.name == 'sprite-rotate')
                     {
                         group.rotation.z -= Math.PI/2;
+                        group.rotation.z %= Math.PI * 2;
 
                         // re positioning control stripes
                         for(var i in group.children){
@@ -497,12 +558,60 @@ var SofaConfigurator = function(item){
 
                             }
                         }
+
+                        ////////////////////////////////////////////////
+                        //add to undoManager
+                        ////////////////////////////////////////////////
+                        undoManager.add({
+                            undo : function(){
+                                group.rotation.z += Math.PI/2;
+                                group.rotation.z %= Math.PI * 2;
+
+                                for(var i in group.children){
+                                    if(group.children[i] instanceof THREE.Sprite)
+                                    {
+                                        var tmp = group.children[i].position.x;
+                                        group.children[i].position.x = group.children[i].position.y;
+                                        group.children[i].position.y = -tmp;
+                                    }
+                                }
+                            },
+                            redo : function(){
+                                group.rotation.z -= Math.PI/2;
+                                group.rotation.z %= Math.PI * 2;
+
+                                // re positioning control stripes
+                                for(var i in group.children){
+                                    if(group.children[i] instanceof THREE.Sprite)
+                                    {
+                                        var tmp = group.children[i].position.x;
+                                        group.children[i].position.x = - group.children[i].position.y;
+                                        group.children[i].position.y = tmp;
+
+                                    }
+                                }
+                            }
+                        })
                     }
                     //remove selected sofa
                     else if(item.object.name == 'sprite-delete')
                     {
                         var group = item.object.parent;
+                        control.detach();
                         scene.remove(group);
+                        ////////////////////////////////////////////////
+                        //add to undoManager
+                        ////////////////////////////////////////////////
+                        undoManager.add({
+                            undo : function(){
+                                scene.add(group);
+                                control.attach(group);
+                            },
+                            redo : function(){
+                                scene.remove(group)
+                                control.detach();
+                            }
+                        })
                     }
                 }
                 else if(item.object instanceof THREE.Mesh)

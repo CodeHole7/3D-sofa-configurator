@@ -128,6 +128,10 @@ THREE.TransformControls = function ( camera, domElement ) {
 
 	};
 
+	//Get current object
+	this.getCurrent = function () {
+		return this.object;
+	}
 	// Set current object
 	this.attach = function ( object ) {
 

@@ -7,26 +7,32 @@ const lstCategory = [
         components : [
             {
                 name : "LV8005 1",
+                thumbImage : "LV8005-1.jpg",
                 data : "LV8005-1.3DS"
             },
             {
                 name : "LV8005 3",
+                thumbImage : "LV8005-2.jpg",
                 data : "LV8005-3.3DS"
             },
             {
                 name : "LV8005 B2",
+                thumbImage : "LV8005-B2.jpg",
                 data : "LV8005-B2.3DS"
             },
             {
                 name : "LV8005 B4",
+                thumbImage : "LV8005-B4.jpg",
                 data : "LV8005-B4.3DS"
             },
             {
                 name : "LV8005 B5",
+                thumbImage : "LV8005-B5.jpg",
                 data : "LV8005-B5.3DS"
             },
             {
                 name : "LV8005 B6",
+                thumbImage : "LV8005-B6.jpg",
                 data : "LV8005-B6.3DS"
             },
         ]
@@ -38,22 +44,27 @@ const lstCategory = [
         components : [
             {
                 name : "LV8013 C1",
+                thumbImage : "LV8013-C1.jpg",
                 data : "LV8013-C1.3DS"
             },
             {
                 name : "LV8013 C2",
+                thumbImage : "LV8013-C2.jpg",
                 data : "LV8013-C2.3DS"
             },
             {
                 name : "LV8013 C3",
+                thumbImage : "LV8013-C3.jpg",
                 data : "LV8013-C3.3DS"
             },
             {
                 name : "LV8013 C4",
+                thumbImage : "LV8013-C4.jpg",
                 data : "LV8013-C4.3DS"
             },
             {
                 name : "LV8013 C5",
+                thumbImage : "LV8013-C5.jpg",
                 data : "LV8013-C5.3DS"
             },
         ]
@@ -65,31 +76,38 @@ const lstCategory = [
         components : [
             {
                 name : "LV8019 1",
+                thumbImage : "LV8019-01.jpg",
                 data : "LV8019-01.3DS"
             },
             {
                 name : "LV8019 2",
+                thumbImage : "LV8019-02.jpg",
                 data : "LV8019-02.3DS"
             },
             {
                 name : "LV8019 3",
+                thumbImage : "LV8019-03.jpg",
                 data : "LV8019-03.3DS"
             },
             {
                 name : "LV8019 4",
+                thumbImage : "LV8019-04.jpg",
                 data : "LV8019-04.3DS"
             },
             {
                 name : "LV8019 5",
+                thumbImage : "LV8019-05.jpg",
                 data : "LV8019-05.3DS"
             },
             {
                 name : "LV8019 6",
+                thumbImage : "LV8019-06.jpg",
                 data : "LV8019-06.3DS"
             },
         ]
     },
 ];
+
 const lstColor = [
     {
         color : "000000",
@@ -186,7 +204,7 @@ var CategoryLoader = function(){
     lstCategory.map((item,i)=>{
         $('#category-list').append(
             "<div class='category-item' data-index='"+i+"'>"+
-            "<img src='"+item.thumbImage+"'>"+
+            "<img src='"+item.thumbImage+"' width='100%'>"+
             "<p class='title'>"+item.name+"</p>"+
             "<p class='description'>"+item.description+"</p>"+
             "</div>"
