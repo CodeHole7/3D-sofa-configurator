@@ -23,6 +23,19 @@ var SofaConfigurator = function(item){
     }
 
     /////////////////////////////////////////////
+    //undo/redo management
+    /////////////////////////////////////////////
+    $('.btn-undo').click(function(){
+        console.log('try to undo');
+        undoManager.undo();
+    })
+
+    $('.btn-redo').click(function(){
+        console.log('try to redo');
+        undoManager.redo();
+    })
+
+    /////////////////////////////////////////////
     //Add component event dispatch
     /////////////////////////////////////////////
     $('.single-component').click(function(){
@@ -40,12 +53,10 @@ var SofaConfigurator = function(item){
                 object.children[j].receiveShadow = true;
                 object.children[j].material = new THREE.MeshStandardMaterial({color : 'red'});
             }
-            //add components for control handlers
-            //rotate sprite
+            //add sprites for control handlers
+            //sprite for rotate
             var spriteRotateMap = new THREE.TextureLoader().load( 'texture/sprite-rotate.png' );
-
             var spriteRotateMaterial = new THREE.SpriteMaterial( { map: spriteRotateMap, color: 0xffffff } );
-
             var spriteRotate = new THREE.Sprite( spriteRotateMaterial );
             spriteRotate.scale.set(200, 200, 1)
             spriteRotate.position.set(0,-200,1100);
@@ -53,11 +64,9 @@ var SofaConfigurator = function(item){
             spriteRotate.visible = false;
             object.add(spriteRotate);
 
-            //delete sprite
+            //sprite for delete
             var spriteDeleteMap = new THREE.TextureLoader().load( 'texture/sprite-delete.png' );
-
             var spriteDeleteMaterial = new THREE.SpriteMaterial( { map: spriteDeleteMap, color: 0xffffff } );
-
             var spriteDelete = new THREE.Sprite( spriteDeleteMaterial );
             spriteDelete.scale.set(200, 200, 1)
             spriteDelete.position.set(0,200,1100);
@@ -70,6 +79,16 @@ var SofaConfigurator = function(item){
             lstElement.push({
                 name : object.name,
                 model : object
+            })
+
+            //add to UndoManager
+            undoManager.add({
+                undo : function(){
+                    scene.remove(object);
+                },
+                redo : function(){
+                    scene.add(object);
+                }
             })
         })
     })
@@ -85,6 +104,21 @@ var SofaConfigurator = function(item){
             animate();
         }
         // lstElement = [];
+        //add to undoManager
+        undoManager.add({
+            undo : function(){
+                var list = Object.assign(lstElement);
+                for(var i in list){
+                    scene.add(list[i].model);
+                }
+            },
+            redo : function(){
+                var list = Object.assign(lstElement);
+                for(var i in list){
+                    scene.remove(list[i].model);
+                }
+            }
+        })
     })
 
     $('#select-type').hide();
@@ -131,20 +165,55 @@ var SofaConfigurator = function(item){
             bumpImage.wrapS = THREE.RepeatWrapping;
             bumpImage.wrapT = THREE.RepeatWrapping;
 
-            var material = new THREE.MeshStandardMaterial({
+            var textureMaterial = new THREE.MeshStandardMaterial({
                 map : textureImage,
                 bumpMap : bumpImage,
                 // metalness : 0.2,
                 // roughness : 0.4,
             })
-            
+
+            var beforeLstElement =[];
+            for(var i in lstElement){
+                var item = lstElement[i].model;
+                beforeLstElement[i] = [];
+                for(var j in item.children){
+                    beforeLstElement[i][j] = item.children[j].material
+                }
+            }
+            console.log(beforeLstElement)
             for(var i in lstElement){
                 var item = lstElement[i].model;
                 for(var j in item.children){
                     if(item.children[j] instanceof THREE.Mesh)
-                        item.children[j].material = material;
+                        item.children[j].material = textureMaterial;
                 }
             }
+
+            /////////////////////////////////////////////
+            //add to undoManager
+            /////////////////////////////////////////////
+            undoManager.add({
+                undo : function(){
+                    for(var i in lstElement){
+                        var item = lstElement[i].model;
+                        for(var j in item.children){
+                            if(item.children[j] instanceof THREE.Mesh)
+                            {
+                                item.children[j].material = beforeLstElement[i][j];
+                            }
+                        }
+                    }
+                },
+                redo : function(){
+                    for(var i in lstElement){
+                        var item = lstElement[i].model;
+                        for(var j in item.children){
+                            if(item.children[j] instanceof THREE.Mesh)
+                                item.children[j].material = textureMaterial;
+                        }
+                    }
+                }
+            })
         }, 500);
     }
 
@@ -156,10 +225,11 @@ var SofaConfigurator = function(item){
         $(this).addClass('active');
         loadTexture($(this).data('texture'))
     })
+
     /*
     *manage color
     */
-    //add all colors
+    //add all colors dom
     for(var i in lstColor){
         var item = lstColor[i];
         $('#primary-color-selector').append(
@@ -181,6 +251,14 @@ var SofaConfigurator = function(item){
         })
         $(this).addClass('active');
         var color = $(this).data('color');
+        var beforeLstElement =[];
+        for(var i in lstElement){
+            var item = lstElement[i].model;
+            beforeLstElement[i] = [];
+            for(var j in item.children){
+                beforeLstElement[i][j] = item.children[j].material
+            }
+        }
         for(var i in lstElement){
             var item = lstElement[i].model;
             for(var j in item.children){
@@ -195,6 +273,39 @@ var SofaConfigurator = function(item){
                 }
             }
         }
+        
+        ////////////////////////////////////////////////
+        //add to undoManager
+        ////////////////////////////////////////////////
+        undoManager.add({
+            undo : function(){
+                for(var i in lstElement){
+                    var item = lstElement[i].model;
+                    for(var j in item.children){
+                        if(item.children[j].name.includes('CG-1') == true)
+                        {
+                            item.children[j].material = beforeLstElement[i][j];
+                        }
+                    }
+                }
+            },
+            redo : function(){
+                for(var i in lstElement){
+                    var item = lstElement[i].model;
+                    for(var j in item.children){
+                        if(item.children[j].name.includes('CG-1') == true)
+                        {
+                            var newMat = item.children[j].material.clone();
+                            newMat.color.set('#'+color);
+                            newMat.map = null;
+                            newMat.needsUpdate = true;
+        
+                            item.children[j].material = newMat;
+                        }
+                    }
+                }
+            }
+        })
     })
     $('#secondary-color-selector .select-color-item').click(function(){
         $(this).parent().find('.select-color-item').each(function(){
@@ -202,6 +313,16 @@ var SofaConfigurator = function(item){
         })
         $(this).addClass('active');
         var color = $(this).data('color');
+        
+        var beforeLstElement =[];
+        for(var i in lstElement){
+            var item = lstElement[i].model;
+            beforeLstElement[i] = [];
+            for(var j in item.children){
+                beforeLstElement[i][j] = item.children[j].material
+            }
+        }
+        
         for(var i in lstElement){
             var item = lstElement[i].model;
             for(var j in item.children){
@@ -216,6 +337,38 @@ var SofaConfigurator = function(item){
                 }
             }
         }
+        ////////////////////////////////////////////////
+        //add to undoManager
+        ////////////////////////////////////////////////
+        undoManager.add({
+            undo : function(){
+                for(var i in lstElement){
+                    var item = lstElement[i].model;
+                    for(var j in item.children){
+                        if(item.children[j].name.includes('CG-2') == true)
+                        {
+                            item.children[j].material = beforeLstElement[i][j];
+                        }
+                    }
+                }
+            },
+            redo : function(){
+                for(var i in lstElement){
+                    var item = lstElement[i].model;
+                    for(var j in item.children){
+                        if(item.children[j].name.includes('CG-2') == true)
+                        {
+                            var newMat = item.children[j].material.clone();
+                            newMat.color.set('#'+color);
+                            newMat.map = null;
+                            newMat.needsUpdate = true;
+        
+                            item.children[j].material = newMat;
+                        }
+                    }
+                }
+            }
+        })
     })
     
 
@@ -226,7 +379,7 @@ var SofaConfigurator = function(item){
     var renderer, scene, camera;
     var control;
     var sceneContainer = document.getElementById('canvasSofa');
-    var projector, mouse = { x: 0, y: 0 };
+    var mouse = { x: 0, y: 0 };
     
     init();
     animate();
@@ -297,19 +450,7 @@ var SofaConfigurator = function(item){
         control.addEventListener( 'dragging-changed', function ( event ) {
                     orbit.enabled = ! event.value;
                 } );
-        // control.addEventListener('change',animate);
         scene.add(control);
-
-        // var geometry = new THREE.BoxBufferGeometry( 200, 200, 200 );
-        // var material = new THREE.MeshStandardMaterial( { color : 0xffff00 } );
-        
-        // var mesh = new THREE.Mesh( geometry, material );
-        // scene.add( mesh );
-        // var mesh2 = new THREE.Mesh( geometry, material );
-        // mesh2.position.x = 300;
-        // scene.add(mesh2)
-        // control.attach(mesh);
-        // control.attach(mesh2);
 
         control.showY = false;
         
@@ -331,7 +472,6 @@ var SofaConfigurator = function(item){
             mouse.x = ( event.offsetX / renderer.domElement.clientWidth ) * 2 - 1;
             mouse.y = - ( event.offsetY / renderer.domElement.clientHeight ) * 2 + 1;
             
-            var vector = new THREE.Vector3( mouse.x, mouse.y, 1 );
             var raycaster = new THREE.Raycaster();
             raycaster.setFromCamera( mouse, camera );
             // scene.add(new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 1000, 0xff0000) );
