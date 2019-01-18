@@ -1,6 +1,10 @@
-var lstElement = [];
-
 var SofaConfigurator = function(item){
+    var lstElement = [];
+    var undoManager = new UndoManager();
+
+    ////////////////////////////////////////////
+    //Initialize DOM
+    ////////////////////////////////////////////
     $('#category-list').hide();
     $('#sofa-config-panel').show();
     $('#canvasSofa').children().remove();
@@ -18,9 +22,9 @@ var SofaConfigurator = function(item){
         })
     }
 
-    /*
-    *Add component event dispatch
-    */
+    /////////////////////////////////////////////
+    //Add component event dispatch
+    /////////////////////////////////////////////
     $('.single-component').click(function(){
         var name = $(this).attr('cat');
 
