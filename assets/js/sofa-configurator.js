@@ -212,11 +212,9 @@ var SofaConfigurator = function(item){
                         object.rotation.z = parentRotation.z
                     }
                     break;
-                    break;
                 case 'right' :
                     if(parentRotation.z == 0) //0deg
                     {
-                        console.log(parentGizmo.max.x,object.boundingBox.max.x)
                         object.position.z = -(parentGizmo.min.z - object.boundingBox.max.z)+parentPosition.z;
                         object.position.x = (parentGizmo.max.x - object.boundingBox.max.x) + parentPosition.x;
                     }
@@ -237,6 +235,32 @@ var SofaConfigurator = function(item){
                         object.position.x = -(parentGizmo.min.z - object.boundingBox.max.z)+parentPosition.x;
                         object.position.z = -(parentGizmo.max.x - object.boundingBox.max.x) + parentPosition.z;
                         object.rotation.z = parentRotation.z
+                    }
+                    break;
+                case 'bottom' :
+                    if(parentRotation.z == 0) //0deg
+                    {
+                        object.position.x = (parentGizmo.min.x - object.boundingBox.max.z) + parentPosition.x;
+                        object.position.z = (parentGizmo.max.z - object.boundingBox.max.x) + parentPosition.z;
+                        object.rotation.z = -Math.PI/2;
+                    }
+                    else if(parentRotation.z == -Math.PI/2) //90deg
+                    {
+                        object.position.z = (parentGizmo.min.x - object.boundingBox.max.z) + parentPosition.z;
+                        object.position.x = -(parentGizmo.max.z - object.boundingBox.max.x) + parentPosition.x;
+                        object.rotation.z = -Math.PI;
+                    }
+                    else if(parentRotation.z == -Math.PI) //180deg
+                    {
+                        object.position.x = -(parentGizmo.min.x - object.boundingBox.max.z) + parentPosition.x;
+                        object.position.z = -(parentGizmo.max.z - object.boundingBox.max.x) + parentPosition.z;
+                        object.rotation.z = -Math.PI * 3/2;
+                    }
+                    else if(parentRotation.z == -Math.PI * 3/2) //270deg
+                    {
+                        object.position.z = -(parentGizmo.min.x - object.boundingBox.max.z) + parentPosition.z;
+                        object.position.x = +(parentGizmo.max.z - object.boundingBox.max.x) + parentPosition.x;
+                        object.rotation.z = 0;
                     }
                     break;
                 default:
@@ -548,6 +572,7 @@ var SofaConfigurator = function(item){
     }
     var renderer, scene, camera;
     var control;
+    var orbit;
     var sceneContainer = document.getElementById('canvasSofa');
     var mouse = { x: 0, y: 0 };
     var transformBeforeMovingPos = {x : 0, y : 0, z : 0};
@@ -583,7 +608,7 @@ var SofaConfigurator = function(item){
         scene = new THREE.Scene();
         
         scene.background = new THREE.Color( 0x333333 );
-        
+
         // scene.fog = new THREE.Fog( 0xaaaaaa, 25000, 14000 );
         // LIGHTS
         // var dirLight = new THREE.DirectionalLight( 0xffffff, 0.125 );
@@ -608,7 +633,7 @@ var SofaConfigurator = function(item){
         mshStdFloor.receiveShadow = true;
         scene.add( mshStdFloor );
 
-        var orbit = new THREE.OrbitControls( camera, renderer.domElement );
+        orbit = new THREE.OrbitControls( camera, renderer.domElement );
     
         // vertical angle control
         orbit.minPolarAngle = -Math.PI / 2;
@@ -687,7 +712,7 @@ var SofaConfigurator = function(item){
 
     //interaction with mouse event
     function checkClickedEvent(event){
-        if(event.button == 0)
+        if(event.button == 0 && orbit.enabled == true)
         {
             var objects = [];
             for(var i in lstElement){
@@ -794,7 +819,6 @@ var SofaConfigurator = function(item){
                             }
                         }
                         control.detach();
-                        item.object.visible = true;
 
                         console.log(item.object.name);
                         $('.custom-nav-item[data-cat="additional"]').trigger('click')
@@ -835,6 +859,20 @@ var SofaConfigurator = function(item){
                             }
                         }
                         else if(item.object.name == 'sprite-add-bottom'){
+                            combiningParent = item.object.parent;
+                            combiningDirection = 'bottom';
+
+                            //collect available components
+                            $('.additional-component').addClass('hidden');
+                            for(var i in fullItemList){
+                                var combineInfo = fullItemList[i].combineInfo;
+                                if(combineInfo){
+                                    if(combineInfo.leftTop[0] == true){
+                                        $('.additional-component[cat="'+fullItemList[i].data+'"]').removeClass('hidden');
+                                        continue;
+                                    }
+                                }
+                            }
                         }
                     }
                 }
