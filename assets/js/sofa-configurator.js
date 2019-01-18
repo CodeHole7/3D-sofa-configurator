@@ -12,7 +12,7 @@ var SofaConfigurator = function(item){
 
     //display all sofa components
     if(item.components){
-        $('#select-type').append("<h2>Categories</h2>");
+        $('#select-type').append("<h2 style='margin : 0'>Categories</h2>");
         item.components.map((component,i)=>{
             $('#select-type').append(
                 "<div class='single-component' cat='"+component.data+"'>"+
@@ -174,8 +174,8 @@ var SofaConfigurator = function(item){
             var textureMaterial = new THREE.MeshStandardMaterial({
                 map : textureImage,
                 bumpMap : bumpImage,
-                // metalness : 0.2,
-                // roughness : 0.4,
+                metalness : 0.6,
+                roughness : 0.3,
             })
 
             var beforeLstElement =[];
@@ -190,7 +190,7 @@ var SofaConfigurator = function(item){
             for(var i in lstElement){
                 var item = lstElement[i].model;
                 for(var j in item.children){
-                    if(item.children[j] instanceof THREE.Mesh)
+                    if(item.children[j] instanceof THREE.Mesh && item.children[j].name.includes('metal') == false)
                         item.children[j].material = textureMaterial;
                 }
             }

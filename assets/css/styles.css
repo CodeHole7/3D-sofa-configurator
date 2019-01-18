@@ -150,9 +150,11 @@ body {
 
 #select-type .single-component{
     display: inline-block;
-    margin: 1rem 2rem;
+    margin: 0.5rem 1rem;
     cursor: pointer;
     padding: 0.5rem;
+    text-align: center;
+    align-items: center;
 }
 
 #select-type .single-component:hover{
