@@ -8,27 +8,57 @@ const lstCategory = [
             {
                 name : "LV8005 1",
                 thumbImage : "LV8005-1.jpg",
-                data : "LV8005-1.3DS"
+                data : "LV8005-1.3DS",
+                combineInfo : {
+                    leftTop     : [false,false],
+                    rightTop    : [false,true],
+                    rightBottom : [true,false],
+                    leftBottom  : [false,false]
+                }
             },
             {
                 name : "LV8005 3",
-                thumbImage : "LV8005-2.jpg",
-                data : "LV8005-3.3DS"
+                thumbImage : "LV8005-3.jpg",
+                data : "LV8005-3.3DS",
+                combineInfo : {
+                    leftTop     : [true,false],
+                    rightTop    : [false,true],
+                    rightBottom : [true,false],
+                    leftBottom  : [false,true]
+                }
             },
             {
                 name : "LV8005 B2",
                 thumbImage : "LV8005-B2.jpg",
-                data : "LV8005-B2.3DS"
+                data : "LV8005-B2.3DS",
+                combineInfo : {
+                    leftTop     : [true,false],
+                    rightTop    : [false,true],
+                    rightBottom : [true,false],
+                    leftBottom  : [false,true]
+                }
             },
             {
                 name : "LV8005 B4",
                 thumbImage : "LV8005-B4.jpg",
-                data : "LV8005-B4.3DS"
+                data : "LV8005-B4.3DS",
+                combineInfo : {
+                    leftTop     : [true,false],
+                    rightTop    : [false,false],
+                    rightBottom : [false,true],
+                    leftBottom  : [true,true]
+                }
             },
             {
                 name : "LV8005 B5",
                 thumbImage : "LV8005-B5.jpg",
-                data : "LV8005-B5.3DS"
+                data : "LV8005-B5.3DS",
+                combineInfo : {
+                    leftTop     : [true,false],
+                    rightTop    : [false,false],
+                    rightBottom : [false,false],
+                    leftBottom  : [false,false]
+                }
             },
             {
                 name : "LV8005 B6",

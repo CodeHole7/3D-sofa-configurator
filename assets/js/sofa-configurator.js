@@ -1,6 +1,7 @@
 var SofaConfigurator = function(item){
     var lstElement = [];
     var undoManager = new UndoManager();
+    var fullItemList = item.components;
 
     ////////////////////////////////////////////
     //Initialize DOM
@@ -58,6 +59,13 @@ var SofaConfigurator = function(item){
                     roughness : 0.5,
                 });
             }
+
+            var bbox = new THREE.Box3().setFromObject(object);
+            console.log('bofore',bbox)
+            
+            object.boundingBox = bbox;
+            console.log('current group',object)
+
             //add sprites for control handlers
             //sprite for rotate
             var spriteRotateMap = new THREE.TextureLoader().load( 'texture/sprite-rotate.png' );
@@ -79,8 +87,66 @@ var SofaConfigurator = function(item){
             spriteDelete.visible = false;
             object.add(spriteDelete);
 
+            //sprite for add
+            var currentItem = null;
+            for(var i in fullItemList){
+                if(fullItemList[i].data == name){
+                    currentItem = fullItemList[i];
+                    break;
+                }
+            }
+            if(currentItem.combineInfo)
+            {
+                var combineInfo = currentItem.combineInfo;
+                // console.log('combine info',combineInfo)
+                // console.log('bounding box',bbox)
+                var spriteAddMap = new THREE.TextureLoader().load( 'texture/sprite-add.png' );
+                var spriteAddMaterial = new THREE.SpriteMaterial( { map: spriteAddMap, color: 0xffffff } );
+
+                if(combineInfo.leftTop[0] == true)
+                {
+                    var spriteAddLeft = new THREE.Sprite( spriteAddMaterial );
+                    spriteAddLeft.scale.set(200, 200, 1)
+                    spriteAddLeft.position.set(0,bbox.max.z + 200 ,100); 
+                    spriteAddLeft.name = "sprite-add-left";
+                    spriteAddLeft.visible = false;
+                    object.add(spriteAddLeft);
+                }
+                if(combineInfo.rightTop[0] == true)
+                {
+                    var spriteAddTop = new THREE.Sprite( spriteAddMaterial );
+                    spriteAddTop.scale.set(200, 200, 1)
+                    spriteAddTop.position.set(bbox.max.x + 200 , 0 ,100); 
+                    spriteAddTop.name = "sprite-add-top";
+                    spriteAddTop.visible = false;
+                    object.add(spriteAddTop);
+                }
+                if(combineInfo.rightBottom[0] == true)
+                {
+                    var spriteAddRight = new THREE.Sprite( spriteAddMaterial );
+                    spriteAddRight.scale.set(200, 200, 1)
+                    spriteAddRight.position.set(0,bbox.min.z - 200 ,100);
+                    spriteAddRight.name = "sprite-add-left";
+                    spriteAddRight.visible = false;
+                    object.add(spriteAddRight);
+                }
+                if(combineInfo.leftBottom[0] == true)
+                {
+                    var spriteAddBottom = new THREE.Sprite( spriteAddMaterial );
+                    spriteAddBottom.scale.set(200, 200, 1)
+                    spriteAddBottom.position.set(bbox.min.x - 200 , 0 ,100); 
+                    spriteAddBottom.name = "sprite-add-top";
+                    spriteAddBottom.visible = false;
+                    object.add(spriteAddBottom);
+                }
+            }
+            var bbox2 = new THREE.Box3().setFromObject(object);
+            console.log('after',bbox2)
+
             //add to scene
             scene.add(object)
+
+            //add to list
             lstElement.push({
                 name : object.name,
                 model : object
@@ -127,7 +193,7 @@ var SofaConfigurator = function(item){
         })
     })
 
-    $('#select-type').hide();
+    // $('#select-type').hide();
     
     /*
     *Manage Elements
@@ -507,7 +573,6 @@ var SofaConfigurator = function(item){
                         }
                     }
                 })
-                console.log(undoManager)
             }
         });
         scene.add(control);
@@ -518,10 +583,11 @@ var SofaConfigurator = function(item){
         renderer.domElement.addEventListener('mousedown',checkClickedEvent,false);
     }
 
+
+    //interaction with mouse event
     function checkClickedEvent(event){
         if(event.button == 0)
         {
-
             var objects = [];
             for(var i in lstElement){
                 for(var j in lstElement[i].model.children)
@@ -550,7 +616,7 @@ var SofaConfigurator = function(item){
 
                         // re positioning control stripes
                         for(var i in group.children){
-                            if(group.children[i] instanceof THREE.Sprite)
+                            if(group.children[i] instanceof THREE.Sprite && (group.children[i].name == "sprite-rotate" || group.children[i].name == "sprite-delete"))
                             {
                                 var tmp = group.children[i].position.x;
                                 group.children[i].position.x = - group.children[i].position.y;
@@ -568,7 +634,7 @@ var SofaConfigurator = function(item){
                                 group.rotation.z %= Math.PI * 2;
 
                                 for(var i in group.children){
-                                    if(group.children[i] instanceof THREE.Sprite)
+                                    if(group.children[i] instanceof THREE.Sprite && (group.children[i].name == "sprite-rotate" || group.children[i].name == "sprite-delete"))
                                     {
                                         var tmp = group.children[i].position.x;
                                         group.children[i].position.x = group.children[i].position.y;
@@ -582,7 +648,7 @@ var SofaConfigurator = function(item){
 
                                 // re positioning control stripes
                                 for(var i in group.children){
-                                    if(group.children[i] instanceof THREE.Sprite)
+                                    if(group.children[i] instanceof THREE.Sprite && (group.children[i].name == "sprite-rotate" || group.children[i].name == "sprite-delete"))
                                     {
                                         var tmp = group.children[i].position.x;
                                         group.children[i].position.x = - group.children[i].position.y;
