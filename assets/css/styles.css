@@ -89,7 +89,7 @@ body {
 }
 
 #sofa-config-panel .side-drawer.collapsed{
-    right : -335px;
+    right : -320px;
     transition: .3s;
 }
 
@@ -162,13 +162,30 @@ body {
     transition: .7s;
 }
 
+#additional-items .additional-component{
+    display: inline-block;
+    margin: 0.5rem 1rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    text-align: center;
+    align-items: center;
+}
+
+#additional-items .additional-component.hidden{
+    display: none;
+}
+
+#additional-items .additional-component:hover{
+    background: #dddddd;
+    transition: .7s;
+}
 .custom-nav{
 
 }
 
 .custom-nav .custom-nav-item{
     display: inline-block;
-    width: 32.5%;
+    width: 24.5%;
     background: gray;
     text-align: center;
     color: white;
@@ -181,10 +198,19 @@ body {
     background-color: #333333;
     transition: .7s;
 }
+
 .custom-nav .custom-nav-item.active{
     background-color: white;
     color: gray;
     transition: .7s;
+}
+
+.custom-nav-content .custom-nav-content-item{
+    display: none;
+}
+
+.custom-nav-content .custom-nav-content-item.active{
+    display: block;
 }
 
 .side-drawer-content{

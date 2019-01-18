@@ -10,6 +10,7 @@ const lstCategory = [
                 thumbImage : "LV8005-1.jpg",
                 data : "LV8005-1.3DS",
                 combineInfo : {
+                    backChair   : ['top'],
                     leftTop     : [false,false],
                     rightTop    : [false,true],
                     rightBottom : [true,false],
@@ -21,6 +22,7 @@ const lstCategory = [
                 thumbImage : "LV8005-3.jpg",
                 data : "LV8005-3.3DS",
                 combineInfo : {
+                    backChair   : ['top'],
                     leftTop     : [true,false],
                     rightTop    : [false,true],
                     rightBottom : [true,false],
@@ -32,6 +34,7 @@ const lstCategory = [
                 thumbImage : "LV8005-B2.jpg",
                 data : "LV8005-B2.3DS",
                 combineInfo : {
+                    backChair   : ['top'],
                     leftTop     : [true,false],
                     rightTop    : [false,true],
                     rightBottom : [true,false],
@@ -43,6 +46,7 @@ const lstCategory = [
                 thumbImage : "LV8005-B4.jpg",
                 data : "LV8005-B4.3DS",
                 combineInfo : {
+                    backChair   : ['top','right'],
                     leftTop     : [true,false],
                     rightTop    : [false,false],
                     rightBottom : [false,true],
@@ -54,6 +58,7 @@ const lstCategory = [
                 thumbImage : "LV8005-B5.jpg",
                 data : "LV8005-B5.3DS",
                 combineInfo : {
+                    backChair   : ['left'],
                     leftTop     : [true,false],
                     rightTop    : [false,false],
                     rightBottom : [false,false],
@@ -227,8 +232,6 @@ const lstColor = [
 //example data end
 
 var CategoryLoader = function(){
-    console.log('load categories');
-    console.log('data',lstCategory);
 
     $('#category-list').children().remove();
     lstCategory.map((item,i)=>{
@@ -242,13 +245,11 @@ var CategoryLoader = function(){
     });
     $('.category-item').click(function(){
         var id = $(this).data('index');
-        console.log('clicked')
         SofaConfigurator(lstCategory[id]);
     })
 }
 
 function hideSideDrawer(){
-    console.log('hide side drawer')
     $('.toggle-collapse').removeClass('expanded');
     $('.toggle-collapse').addClass('collapsed');
     $('.side-drawer').removeClass('expanded');
@@ -256,7 +257,6 @@ function hideSideDrawer(){
 }
 
 function openSideDrawer(){
-    console.log('open side drawer');
     $('.toggle-collapse').addClass('expanded');
     $('.toggle-collapse').removeClass('collapsed');
     $('.side-drawer').addClass('expanded');
@@ -264,7 +264,6 @@ function openSideDrawer(){
 }
 
 $('document').ready(function(){
-    console.log('document ready');
     CategoryLoader();
     $('#sofa-config-panel').hide();
     $('.btn-back').click(function(){
@@ -273,7 +272,6 @@ $('document').ready(function(){
     })
 
     $('.toggle-collapse').click(function(){
-        console.log('toggle clicked');
 
         if($(this).hasClass('expanded')){
             hideSideDrawer();
@@ -291,11 +289,18 @@ $('document').ready(function(){
             $(this).removeClass('active');
         })
         $(this).addClass('active');
-        openSideDrawer();
+        if($(this).data('cat') != 'additional')
+            openSideDrawer();
+        else
+            hideSideDrawer();
 
         var cat = $(this).data('cat');
         //side bar manage
         $('.side-drawer').find('.side-drawer-content').each(function(){
+            if($(this).data('cat') == cat) $(this).addClass('active');
+            else $(this).removeClass('active');
+        })
+        $('.custom-nav-content').find('.custom-nav-content-item').each(function(){
             if($(this).data('cat') == cat) $(this).addClass('active');
             else $(this).removeClass('active');
         })
@@ -308,7 +313,6 @@ $('document').ready(function(){
 
     //dropdown management
     $('.custom-dropdown-header').click(function(){
-        console.log($(this).attr('class'))
         if($(this).parent().hasClass('collapsed'))
         {
             $(this).parent().removeClass('collapsed');

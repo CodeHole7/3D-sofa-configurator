@@ -13,10 +13,22 @@ var SofaConfigurator = function(item){
 
     //display all sofa components
     if(item.components){
+        $('#select-type').children().remove();
         $('#select-type').append("<h2 style='margin : 0'>Categories</h2>");
         item.components.map((component,i)=>{
             $('#select-type').append(
                 "<div class='single-component' cat='"+component.data+"'>"+
+                "<img src='models/"+component.thumbImage+"' width='200px'>"+
+                "<p>"+component.name+"</p>"+
+                "</div>"
+            )
+        })
+
+        $('#additional-items').children().remove();
+        $('#additional-items').append("<h2 style='margin : 0'>Additional Items</h2>");
+        item.components.map((component,i)=>{
+            $('#additional-items').append(
+                "<div class='additional-component hidden' cat='"+component.data+"'>"+
                 "<img src='models/"+component.thumbImage+"' width='200px'>"+
                 "<p>"+component.name+"</p>"+
                 "</div>"
@@ -28,21 +40,17 @@ var SofaConfigurator = function(item){
     //undo/redo management
     /////////////////////////////////////////////
     $('.btn-undo').click(function(){
-        console.log('try to undo');
         undoManager.undo();
     })
 
     $('.btn-redo').click(function(){
-        console.log('try to redo');
         undoManager.redo();
     })
 
     /////////////////////////////////////////////
     //Add component event dispatch
     /////////////////////////////////////////////
-    $('.single-component').click(function(){
-        var name = $(this).attr('cat');
-
+    createNewComponent = function(name, fn){
         var loader = new THREE.TDSLoader();
         loader.load("models/"+name,function(object){
             object.rotation.x = -Math.PI / 2;
@@ -61,10 +69,8 @@ var SofaConfigurator = function(item){
             }
 
             var bbox = new THREE.Box3().setFromObject(object);
-            console.log('bofore',bbox)
             
             object.boundingBox = bbox;
-            console.log('current group',object)
 
             //add sprites for control handlers
             //sprite for rotate
@@ -98,8 +104,6 @@ var SofaConfigurator = function(item){
             if(currentItem.combineInfo)
             {
                 var combineInfo = currentItem.combineInfo;
-                // console.log('combine info',combineInfo)
-                // console.log('bounding box',bbox)
                 var spriteAddMap = new THREE.TextureLoader().load( 'texture/sprite-add.png' );
                 var spriteAddMaterial = new THREE.SpriteMaterial( { map: spriteAddMap, color: 0xffffff } );
 
@@ -126,7 +130,7 @@ var SofaConfigurator = function(item){
                     var spriteAddRight = new THREE.Sprite( spriteAddMaterial );
                     spriteAddRight.scale.set(200, 200, 1)
                     spriteAddRight.position.set(0,bbox.min.z - 200 ,100);
-                    spriteAddRight.name = "sprite-add-left";
+                    spriteAddRight.name = "sprite-add-right";
                     spriteAddRight.visible = false;
                     object.add(spriteAddRight);
                 }
@@ -135,18 +139,112 @@ var SofaConfigurator = function(item){
                     var spriteAddBottom = new THREE.Sprite( spriteAddMaterial );
                     spriteAddBottom.scale.set(200, 200, 1)
                     spriteAddBottom.position.set(bbox.min.x - 200 , 0 ,100); 
-                    spriteAddBottom.name = "sprite-add-top";
+                    spriteAddBottom.name = "sprite-add-bottom";
                     spriteAddBottom.visible = false;
                     object.add(spriteAddBottom);
                 }
             }
-            var bbox2 = new THREE.Box3().setFromObject(object);
-            console.log('after',bbox2)
-
+            
+            fn(object)
+        })
+    }
+    
+    $('.single-component').click(function(){
+        var name = $(this).attr('cat');
+        createNewComponent(name,function(object){
             //add to scene
             scene.add(object)
 
             //add to list
+            lstElement.push({
+                name : object.name,
+                model : object
+            })
+
+            //add to UndoManager
+            undoManager.add({
+                undo : function(){
+                    scene.remove(object);
+                    control.detach();
+                },
+                redo : function(){
+                    scene.add(object);
+                }
+            })
+        });
+    })
+
+    $('.additional-component').click(function(){
+        var name = $(this).attr('cat');
+        console.log('addtional component clicked',name);
+        createNewComponent(name,function(object){
+            var parentGizmo = combiningParent.boundingBox;
+            var parentPosition = combiningParent.position;
+            var parentRotation = combiningParent.rotation;
+            console.log(parentGizmo)
+            console.log(parentPosition)
+            console.log(parentRotation)
+            console.log(parentGizmo.min.z,object.boundingBox.max.z)
+            switch(combiningDirection){
+                case 'left'  :
+                    if(parentRotation.z == 0) //0deg
+                    {
+                        console.log(parentGizmo.max.x,object.boundingBox.max.x)
+                        object.position.z = -(parentGizmo.max.z - object.boundingBox.min.z)+parentPosition.z;
+                        object.position.x = (parentGizmo.max.x - object.boundingBox.max.x) + parentPosition.x;
+                    }
+                    else if(parentRotation.z == -Math.PI/2) //90deg
+                    {
+                        object.position.x = (parentGizmo.max.z - object.boundingBox.min.z) + parentPosition.x;
+                        object.position.z = (parentGizmo.max.x - object.boundingBox.max.x) + parentPosition.z;
+                        object.rotation.z = parentRotation.z
+                    }
+                    else if(parentRotation.z == -Math.PI) //180deg
+                    {
+                        object.position.z = (parentGizmo.max.z - object.boundingBox.min.z)+parentPosition.z;
+                        object.position.x = -(parentGizmo.max.x - object.boundingBox.max.x) + parentPosition.x;
+                        object.rotation.z = parentRotation.z;
+                    }
+                    else if(parentRotation.z == -Math.PI * 3/2) //270deg
+                    {
+                        object.position.x = -(parentGizmo.max.z - object.boundingBox.min.z)+parentPosition.x;
+                        object.position.z = -(parentGizmo.max.x - object.boundingBox.max.x) + parentPosition.z;
+                        object.rotation.z = parentRotation.z
+                    }
+                    break;
+                    break;
+                case 'right' :
+                    if(parentRotation.z == 0) //0deg
+                    {
+                        console.log(parentGizmo.max.x,object.boundingBox.max.x)
+                        object.position.z = -(parentGizmo.min.z - object.boundingBox.max.z)+parentPosition.z;
+                        object.position.x = (parentGizmo.max.x - object.boundingBox.max.x) + parentPosition.x;
+                    }
+                    else if(parentRotation.z == -Math.PI/2) //90deg
+                    {
+                        object.position.x = (parentGizmo.min.z - object.boundingBox.max.z) + parentPosition.x;
+                        object.position.z = (parentGizmo.max.x - object.boundingBox.max.x) + parentPosition.z;
+                        object.rotation.z = parentRotation.z
+                    }
+                    else if(parentRotation.z == -Math.PI) //180deg
+                    {
+                        object.position.z = (parentGizmo.min.z - object.boundingBox.max.z)+parentPosition.z;
+                        object.position.x = -(parentGizmo.max.x - object.boundingBox.max.x) + parentPosition.x;
+                        object.rotation.z = parentRotation.z;
+                    }
+                    else if(parentRotation.z == -Math.PI * 3/2) //270deg
+                    {
+                        object.position.x = -(parentGizmo.min.z - object.boundingBox.max.z)+parentPosition.x;
+                        object.position.z = -(parentGizmo.max.x - object.boundingBox.max.x) + parentPosition.z;
+                        object.rotation.z = parentRotation.z
+                    }
+                    break;
+                default:
+                    break;
+            }
+            //add to list
+            scene.add(object)
+
             lstElement.push({
                 name : object.name,
                 model : object
@@ -252,7 +350,7 @@ var SofaConfigurator = function(item){
                     beforeLstElement[i][j] = item.children[j].material
                 }
             }
-            console.log(beforeLstElement)
+            
             for(var i in lstElement){
                 var item = lstElement[i].model;
                 for(var j in item.children){
@@ -454,6 +552,8 @@ var SofaConfigurator = function(item){
     var mouse = { x: 0, y: 0 };
     var transformBeforeMovingPos = {x : 0, y : 0, z : 0};
     var transformAfterMovingPos = {x : 0, y : 0, z : 0};
+    var combiningParent = null;
+    var combiningDirection = null;
     
     init();
     animate();
@@ -527,17 +627,20 @@ var SofaConfigurator = function(item){
             if(event.value == true)
             {
                 var currentObject = control.getCurrent();
-                transformBeforeMovingPos.x = currentObject.position.x;
-                transformBeforeMovingPos.y = currentObject.position.y;
-                transformBeforeMovingPos.z = currentObject.position.z;
-                console.log('before',transformBeforeMovingPos)
+                if(currentObject instanceof THREE.Group)
+                {
+                    transformBeforeMovingPos.x = currentObject.position.x;
+                    transformBeforeMovingPos.y = currentObject.position.y;
+                    transformBeforeMovingPos.z = currentObject.position.z;
+                }
             }
             else{
                 var currentObject = control.getCurrent();
-                transformAfterMovingPos.x = currentObject.position.x;
-                transformAfterMovingPos.y = currentObject.position.y;
-                transformAfterMovingPos.z = currentObject.position.z;
-                console.log('after',transformAfterMovingPos)
+                if(currentObject instanceof THREE.Group){
+                    transformAfterMovingPos.x = currentObject.position.x;
+                    transformAfterMovingPos.y = currentObject.position.y;
+                    transformAfterMovingPos.z = currentObject.position.z;
+                }
 
                 /////////////////////////////////////////////////
                 //add to undoManager
@@ -546,7 +649,6 @@ var SofaConfigurator = function(item){
                 localBeforePosition.x = transformBeforeMovingPos.x;
                 localBeforePosition.y = transformBeforeMovingPos.y;
                 localBeforePosition.z = transformBeforeMovingPos.z;
-                console.log('before position',localBeforePosition);
 
                 var localAfterPosition = {};
                 localAfterPosition.x = transformAfterMovingPos.x;
@@ -565,7 +667,6 @@ var SofaConfigurator = function(item){
                     },
                     redo : function(){
                         var currentObject = control.getCurrent();
-                        console.log(currentObject);
                         if(currentObject instanceof THREE.Group){
                             currentObject.position.x = localAfterPosition.x;
                             currentObject.position.y = localAfterPosition.y;
@@ -679,7 +780,65 @@ var SofaConfigurator = function(item){
                             }
                         })
                     }
+
+                    //add component sprite clicked
+                    else if(item.object.name.includes('sprite-add') == true){
+                        //hide all control handlers
+                        for(var i in lstElement){
+                            for(var j in lstElement[i].model.children)
+                            {
+                                if(lstElement[i].model.children[j] instanceof THREE.Sprite)
+                                {
+                                    lstElement[i].model.children[j].visible = false;
+                                }
+                            }
+                        }
+                        control.detach();
+                        item.object.visible = true;
+
+                        console.log(item.object.name);
+                        $('.custom-nav-item[data-cat="additional"]').trigger('click')
+
+                        //add to left sprite
+                        if(item.object.name == 'sprite-add-left'){
+                            combiningParent = item.object.parent;
+                            combiningDirection = 'left';
+
+                            //collect available components
+                            $('.additional-component').addClass('hidden');
+                            for(var i in fullItemList){
+                                var combineInfo = fullItemList[i].combineInfo;
+                                if(combineInfo){
+                                    if(combineInfo.rightTop[1] == true){
+                                        $('.additional-component[cat="'+fullItemList[i].data+'"]').removeClass('hidden');
+                                        continue;
+                                    }
+                                }
+                            }
+                        }
+                        else if(item.object.name == 'sprite-add-top'){
+                        }
+                        else if(item.object.name == 'sprite-add-right'){
+                            combiningParent = item.object.parent;
+                            combiningDirection = 'right';
+
+                            //collect available components
+                            $('.additional-component').addClass('hidden');
+                            for(var i in fullItemList){
+                                var combineInfo = fullItemList[i].combineInfo;
+                                if(combineInfo){
+                                    if(combineInfo.leftTop[0] == true){
+                                        $('.additional-component[cat="'+fullItemList[i].data+'"]').removeClass('hidden');
+                                        continue;
+                                    }
+                                }
+                            }
+                        }
+                        else if(item.object.name == 'sprite-add-bottom'){
+                        }
+                    }
                 }
+
                 else if(item.object instanceof THREE.Mesh)
                 {
                     for(var i in lstElement){
