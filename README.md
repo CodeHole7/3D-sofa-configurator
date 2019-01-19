@@ -55,19 +55,13 @@ So that availabilities should be represented in javascript
 
 That info are below
 
-combineInfo : {
-
-                    backChair   : ['top'], //back chair position
-
-                    leftTop     : [false,false],
-
-                    rightTop    : [false,true],
-
-                    rightBottom : [true,false],
-
-                    leftBottom  : [false,false]
-
-           }
+	combineInfo : {
+        backChair   : ['top'], //back chair position
+        leftTop     : [false,false],
+        rightTop    : [false,true],
+        rightBottom : [true,false],
+        leftBottom  : [false,false]
+   	}
 
 The explanations of this structure are below.
 
