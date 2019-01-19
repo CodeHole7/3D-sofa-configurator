@@ -138,12 +138,13 @@ And these information will be used to create add ( + ) sprites for every sofa el
 	        **list** : [
 	            "5e602e",
 	             "412d24",
-	        ]	    }
+	        ]	    
+	    }
 	]
 
 ## The variable which contains all sofa information
 
-SofaConfigurator -\&gt; lstElement;
+SofaConfigurator -> lstElement;
 
 **Structure**
 
