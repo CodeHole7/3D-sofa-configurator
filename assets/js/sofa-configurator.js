@@ -71,7 +71,7 @@ var SofaConfigurator = function(item){
                     object.children[j].material = new THREE.MeshStandardMaterial({
                         color : 0x888888,
                         metalness : 0.4,
-                        roughness : 0.5,
+                        roughness : 0.8,
                     });
                 }
                 else if(object.children[j].name.includes('metal')){
@@ -147,11 +147,13 @@ var SofaConfigurator = function(item){
 
                 if(combineInfo.leftTop[0] == true)
                 {
+                    var length = bbox.max.x - bbox.min.x;
+                    console.log(length < 950 ? 0 : (bbox.max.x - 400))
                     var spriteAddLeft = new THREE.Sprite( spriteAddMaterial );
                     spriteAddLeft.scale.set(200, 200, 1)
-                    spriteAddLeft.position.set(0,bbox.max.z + 200 ,100); 
+                    spriteAddLeft.position.set(length < 950 ? 0 : (bbox.max.x - 400),bbox.max.z + 200 ,100); 
                     spriteAddLeft.name = "sprite-add-left";
-                    spriteAddLeft.visible = false;
+                    // spriteAddLeft.visible = false;
                     object.add(spriteAddLeft);
                 }
                 if(combineInfo.rightTop[0] == true)
@@ -160,7 +162,7 @@ var SofaConfigurator = function(item){
                     spriteAddTop.scale.set(200, 200, 1)
                     spriteAddTop.position.set(bbox.max.x + 200 , 0 ,100); 
                     spriteAddTop.name = "sprite-add-top";
-                    spriteAddTop.visible = false;
+                    // spriteAddTop.visible = false;
                     object.add(spriteAddTop);
                 }
                 if(combineInfo.rightBottom[0] == true)
@@ -169,16 +171,16 @@ var SofaConfigurator = function(item){
                     spriteAddRight.scale.set(200, 200, 1)
                     spriteAddRight.position.set(0,bbox.min.z - 200 ,100);
                     spriteAddRight.name = "sprite-add-right";
-                    spriteAddRight.visible = false;
+                    // spriteAddRight.visible = false;
                     object.add(spriteAddRight);
                 }
                 if(combineInfo.leftBottom[0] == true)
                 {
                     var spriteAddBottom = new THREE.Sprite( spriteAddMaterial );
                     spriteAddBottom.scale.set(200, 200, 1)
-                    spriteAddBottom.position.set(bbox.min.x - 200 , 0 ,100); 
+                    spriteAddBottom.position.set(bbox.min.x - 200 , 0 ,100);
                     spriteAddBottom.name = "sprite-add-bottom";
-                    spriteAddBottom.visible = false;
+                    // spriteAddBottom.visible = false;
                     object.add(spriteAddBottom);
                 }
             }
@@ -191,6 +193,7 @@ var SofaConfigurator = function(item){
         var name = $(this).attr('cat');
         createNewComponent(name,function(object){
             //add to scene
+            console.log('create object',object)
             scene.add(object)
 
             //add to list
@@ -401,7 +404,7 @@ var SofaConfigurator = function(item){
                 map : textureImage,
                 bumpMap : bumpImage,
                 metalness : 0.6,
-                roughness : 0.3,
+                roughness : 0.8,
             })
 
             var beforeLstElement =[];
@@ -677,28 +680,35 @@ var SofaConfigurator = function(item){
         camera.position.set( -3000, 2000, 1500 );
         scene = new THREE.Scene();
         
-        scene.background = new THREE.Color( 0x333333 );
+        scene.background = new THREE.Color( 0xcccccc );
 
-        // scene.fog = new THREE.Fog( 0xaaaaaa, 25000, 14000 );
+        scene.fog = new THREE.Fog( 0xaaaaaa, 25000, 300000 );
         // LIGHTS
         // var dirLight = new THREE.DirectionalLight( 0xffffff, 0.125 );
         // dirLight.position.set( 0, 0, 1 ).normalize();
         // scene.add( dirLight );
 
-        var pointLight = new THREE.PointLight( 0xffffff, 1 );
-        pointLight.position.set( 0, 10000, 10000 );
+        var ambientLight = new THREE.AmbientLight( 0x555555 ); // soft white light
+        scene.add( ambientLight );
+        
+        var lightAmount = 1.2;
+        var pointLight = new THREE.PointLight( 0xffffff, lightAmount );
+        pointLight.position.set( 0, 10000, 20000 );
         scene.add( pointLight );
+        
+        // var pointLightHelper = new THREE.PointLightHelper( pointLight, 400 );
+        // scene.add( pointLightHelper );
     
-        var pointLight2 = new THREE.PointLight( 0xffffff, 1 );
+        var pointLight2 = new THREE.PointLight( 0xffffff, lightAmount );
         pointLight2.position.set( -10000, 10000, -20000 );
         scene.add( pointLight2 );
 
-        var pointLight3 = new THREE.PointLight( 0xffffff, 1 );
-        pointLight3.position.set( 50000, 10000, -10000 );
+        var pointLight3 = new THREE.PointLight( 0xffffff, lightAmount );
+        pointLight3.position.set( 20000, 15000, -10000 );
         scene.add( pointLight3 );
 
         var geoFloor = new THREE.BoxBufferGeometry( 200000, 0.1, 200000 );
-        var matStdFloor = new THREE.MeshStandardMaterial( { color: 0x808080, roughness: 0, metalness: 0 } );
+        var matStdFloor = new THREE.MeshStandardMaterial( { color: 0x666666, roughness: 1, metalness: 0 } );
         var mshStdFloor = new THREE.Mesh( geoFloor, matStdFloor );
         mshStdFloor.receiveShadow = true;
         scene.add( mshStdFloor );
@@ -725,7 +735,7 @@ var SofaConfigurator = function(item){
         orbit.maxPolarAngle = Math.PI / 2 - 0.1;
 
         orbit.minDistance = 1000;
-        orbit.maxDistance = 8000;
+        orbit.maxDistance = 9000;
 
         orbit.update();
     
@@ -801,11 +811,16 @@ var SofaConfigurator = function(item){
         {
             var objects = [];
             for(var i in lstElement){
-                for(var j in lstElement[i].model.children)
+                var checkExist = scene.getObjectByName(lstElement[i].model.name);
+                if(checkExist)
                 {
-                    objects.push(lstElement[i].model.children[j])
+                    for(var j in lstElement[i].model.children)
+                    {
+                        objects.push(lstElement[i].model.children[j])
+                    }
                 }
             }
+
             mouse.x = ( event.offsetX / renderer.domElement.clientWidth ) * 2 - 1;
             mouse.y = - ( event.offsetY / renderer.domElement.clientHeight ) * 2 + 1;
             
@@ -825,7 +840,7 @@ var SofaConfigurator = function(item){
                         group.rotation.z -= Math.PI/2;
                         group.rotation.z %= Math.PI * 2;
 
-                        // re positioning control stripes
+                        // re positioning control sprites
                         for(var i in group.children){
                             if(group.children[i] instanceof THREE.Sprite && (group.children[i].name == "sprite-rotate" || group.children[i].name == "sprite-delete"))
                             {
@@ -857,7 +872,7 @@ var SofaConfigurator = function(item){
                                 group.rotation.z -= Math.PI/2;
                                 group.rotation.z %= Math.PI * 2;
 
-                                // re positioning control stripes
+                                // re positioning control sprites
                                 for(var i in group.children){
                                     if(group.children[i] instanceof THREE.Sprite && (group.children[i].name == "sprite-rotate" || group.children[i].name == "sprite-delete"))
                                     {
@@ -875,7 +890,9 @@ var SofaConfigurator = function(item){
                     {
                         var group = item.object.parent;
                         control.detach();
+                        orbit.enabled = true;
                         scene.remove(group);
+                        console.log(group)
                         ////////////////////////////////////////////////
                         //add to undoManager
                         ////////////////////////////////////////////////
@@ -897,13 +914,14 @@ var SofaConfigurator = function(item){
                         for(var i in lstElement){
                             for(var j in lstElement[i].model.children)
                             {
-                                if(lstElement[i].model.children[j] instanceof THREE.Sprite)
+                                if(lstElement[i].model.children[j] instanceof THREE.Sprite && (lstElement[i].model.children[j].name.includes('sprite-rotate')==true || lstElement[i].model.children[j].name.includes('sprite-delete') == true))
                                 {
                                     lstElement[i].model.children[j].visible = false;
                                 }
                             }
                         }
                         control.detach();
+                        orbit.enabled = true;
 
                         console.log(item.object.name);
                         $('.custom-nav-item[data-cat="additional"]').trigger('click')
