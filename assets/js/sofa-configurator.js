@@ -474,12 +474,15 @@ var SofaConfigurator = function(item){
     */
     //add all colors dom
     for(var i in lstColor){
-        var item = lstColor[i];
-        $('#color-selector').append(
-            "<div class='select-color-item hidden' style='background-color : #"+item.color+"' data-color='"+item.color+"' data-cat='"+item.category+"'>"+
-            "<span class='tooltip'>"+item.name+"</span>"+
-            "</div>"
-        );
+        let category = lstColor[i];
+        for(var j in category.list)
+        {
+            $('#color-selector').append(
+                "<div class='select-color-item hidden' style='background-color : #"+category.list[j]+"' data-color='"+category.list[j]+"' data-cat='"+category.category+"'>"+
+                "<span class='tooltip'>"+category.list[j]+"</span>"+
+                "</div>"
+            );
+        }
     }
 
     //add primary color selection event listeners

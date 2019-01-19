@@ -80,22 +80,50 @@ const lstCategory = [
             {
                 name : "LV8013 C1",
                 thumbImage : "LV8013-C1.jpg",
-                data : "LV8013-C1.3DS"
+                data : "LV8013-C1.3DS",
+                combineInfo : {
+                    backChair   : ['top'],
+                    leftTop     : [false,false],
+                    rightTop    : [false,true],
+                    rightBottom : [true,false],
+                    leftBottom  : [false,false]
+                }
             },
             {
                 name : "LV8013 C2",
                 thumbImage : "LV8013-C2.jpg",
-                data : "LV8013-C2.3DS"
+                data : "LV8013-C2.3DS",
+                combineInfo : {
+                    backChair   : ['top'],
+                    leftTop     : [true,false],
+                    rightTop    : [false,true],
+                    rightBottom : [true,false],
+                    leftBottom  : [false,true]
+                }
             },
             {
                 name : "LV8013 C3",
                 thumbImage : "LV8013-C3.jpg",
-                data : "LV8013-C3.3DS"
+                data : "LV8013-C3.3DS",
+                combineInfo : {
+                    backChair   : ['top','right'],
+                    leftTop     : [true,false],
+                    rightTop    : [false,false],
+                    rightBottom : [false,true],
+                    leftBottom  : [true,true]
+                }
             },
             {
                 name : "LV8013 C4",
                 thumbImage : "LV8013-C4.jpg",
-                data : "LV8013-C4.3DS"
+                data : "LV8013-C4.3DS",
+                combineInfo : {
+                    backChair   : ['top'],
+                    leftTop     : [true,false],
+                    rightTop    : [false,false],
+                    rightBottom : [false,false],
+                    leftBottom  : [false,false]
+                }
             },
             {
                 name : "LV8013 C5",
@@ -112,27 +140,62 @@ const lstCategory = [
             {
                 name : "LV8019 1",
                 thumbImage : "LV8019-01.jpg",
-                data : "LV8019-01.3DS"
+                data : "LV8019-01.3DS",
+                combineInfo : {
+                    backChair   : ['top'],
+                    leftTop     : [false,false],
+                    rightTop    : [false,true],
+                    rightBottom : [true,false],
+                    leftBottom  : [false,false]
+                }
             },
             {
                 name : "LV8019 2",
                 thumbImage : "LV8019-02.jpg",
-                data : "LV8019-02.3DS"
+                data : "LV8019-02.3DS",
+                combineInfo : {
+                    backChair   : ['top'],
+                    leftTop     : [true,false],
+                    rightTop    : [false,true],
+                    rightBottom : [true,false],
+                    leftBottom  : [false,true]
+                }
             },
             {
                 name : "LV8019 3",
                 thumbImage : "LV8019-03.jpg",
-                data : "LV8019-03.3DS"
+                data : "LV8019-03.3DS",
+                combineInfo : {
+                    backChair   : ['top'],
+                    leftTop     : [true,false],
+                    rightTop    : [false,true],
+                    rightBottom : [true,false],
+                    leftBottom  : [false,true]
+                }
             },
             {
                 name : "LV8019 4",
                 thumbImage : "LV8019-04.jpg",
-                data : "LV8019-04.3DS"
+                data : "LV8019-04.3DS",
+                combineInfo : {
+                    backChair   : ['top','right'],
+                    leftTop     : [true,false],
+                    rightTop    : [false,false],
+                    rightBottom : [false,true],
+                    leftBottom  : [true,true]
+                }
             },
             {
                 name : "LV8019 5",
                 thumbImage : "LV8019-05.jpg",
-                data : "LV8019-05.3DS"
+                data : "LV8019-05.3DS",
+                combineInfo : {
+                    backChair   : ['top'],
+                    leftTop     : [true,false],
+                    rightTop    : [false,false],
+                    rightBottom : [false,false],
+                    leftBottom  : [false,false]
+                }
             },
             {
                 name : "LV8019 6",
@@ -145,180 +208,221 @@ const lstCategory = [
 
 const lstColor = [
     {
-        category : "F-006",
-        color : "030303",
-        name : "F-006-100"
+        category : "bonded",
+        list : [
+            "9d4f0d",
+            "706166",
+            "2d2f3e",
+            "492818",
+            "9e7967",
+            "a3908a",
+            "887976",
+            "9f7966",
+            "a07553",
+            "767072",
+            "6f696b",
+            "5b5653",
+            "4f5458",
+            "74402b",
+            "69667a",
+            "783017",
+            "562113",
+            "492b29",
+            "5a0c08",
+            "212934",
+            "2a1b20",
+            "1d1216",
+            "131217",
+            "94633b",
+            "6c250f",
+            "2a0c0a",
+            "17233d",
+            "242d3e",
+            "131917",
+            "664b36",
+            "361e1a",
+            "24272c",
+            "614808",
+            "8d5c33",
+            "612108",
+            "51586b",
+            "827272",
+            "4c1d02",
+            "763b12",
+            "310a0d",
+            "8d5839",
+            "76544a",
+            "422014",
+            "121602",
+            "080f17",
+            "1a151b",
+            "1b1517",
+            "201617",
+            "99949b",
+            "9b8e88",
+            "8d7a6b",
+            "98755a",
+            "8f5c3f",
+            "977045",
+            "a07b61",
+            "80716c",
+            "7e6156",
+            "6d4f44",
+            "5e4236",
+            "5c3320",
+            "695a55",
+            "826a68",
+            "1b161c",
+            "837373",
+            "9e979f",
+            "9a7966",
+            "a38680",
+            "7b4626",
+            "896859",
+            "2d2825",
+            "7a665d",
+            "827066",
+            "a7938a",
+            "8e694c",
+            "836a63",
+            "8c624c",
+            "1a151b",
+            "9f98a0",
+            "a69898",
+            "9a8a8a",
+            "9d8e87",
+            "89756c",
+            "a47b5b",
+            "9e795f",
+            "a07b61",
+            "a0775b",
+            "9b715b",
+            "856c65",
+            "816b6e",
+            "785c51",
+            "7d6f6f",
+            "857a7e",
+            "73686c",
+            "786054",
+            "914301",
+            "7c291e",
+            "3d1a16",
+            "3f1517",
+            "44262d",
+            "212147",
+            "1d2532",
+            "1b1113",
+            "201a1c",
+            "3e2b25",
+            "471a0a",
+            "2f0b02",
+            "251a1e",
+            "3c1a1b",
+            "5d270b"
+        ]
     },
     {
-        category : "F-006",
-        color : "d24d02",
-        name : "F-006-101"
+        category : "genuine",
+        list : [
+            "414352",
+            "7b5940",
+            "3b131b",
+            "1a131a",
+            "481d0d",
+            "987b6b",
+            "b7a8a1",
+            "746364",
+            "a68b7a",
+            "918c92",
+            "8d7e79",
+            "5e2c37",
+            "b07637",
+            "3e1f1d",
+            "745344",
+            "8b6f5a",
+            "675758",
+            "998a83",
+            "786868",
+            "42332c",
+            "b4a298",
+            "b99d92",
+            "947c70",
+            "a18e88",
+            "afaab0",
+            "beb7be",
+            "a8896d",
+            "57311e",
+            "ad9b97",
+            "94a4be",
+            "1b395d",
+            "967d76",
+            "ad9d9d",
+            "918383",
+            "a79d9c",
+            "ad8468",
+            "875135",
+            "412017",
+            "4c1300",
+            "250f11",
+            "261013",
+            "776b75",
+            "7b1f22",
+            "252d40",
+            "151c2e",
+            "62443a",
+            "90808a",
+            "6b7380"
+        ]
     },
     {
-        category : "F-006",
-        color : "715b60",
-        name : "F-006-102"
-    },
-    {
-        category : "F-006",
-        color : "2d2e4a",
-        name : "F-006-103"
-    },
-    {
-        category : "F-006",
-        color : "62280d",
-        name : "F-006-104"
-    },
-    {
-        category : "F-006",
-        color : "b0704b",
-        name : "F-006-105"
-    },
-    {
-        category : "F-006",
-        color : "aa8e7f",
-        name : "F-006-107"
-    },
-    {
-        category : "F-006",
-        color : "605b7b",
-        name : "F-006-116"
-    },
-    {
-        category : "F-006",
-        color : "961d07",
-        name : "F-006-117"
-    },
-    {
-        category : "F-006",
-        color : "7a0303",
-        name : "F-006-120"
-    },
-    {
-        category : "F-006",
-        color : "331c22",
-        name : "F-006-122"
-    },
-    {
-        category : "F-006",
-        color : "131016",
-        name : "F-006-124"
-    },
-    {
-        category : "F-006",
-        color : "8a0e02",
-        name : "F-006-202"
-    },
-    {
-        category : "F-006",
-        color : "151d1c",
-        name : "F-006-206"
-    },
-    {
-        category : "F-008",
-        color : "030303",
-        name : "F-008-100"
-    },
-    {
-        category : "F-008",
-        color : "7a4c26",
-        name : "F-008-101"
-    },
-    {
-        category : "F-008",
-        color : "421a11",
-        name : "F-008-102"
-    },
-    {
-        category : "F-008",
-        color : "815801",
-        name : "F-008-201"
-    },
-    {
-        category : "F-008",
-        color : "af5c1c",
-        name : "F-008-203"
-    },
-    {
-        category : "F-008",
-        color : "891c05",
-        name : "F-008-204"
-    },
-    {
-        category : "F-008",
-        color : "7e6061",
-        name : "F-008-206"
-    },
-    {
-        category : "F-008",
-        color : "6b1700",
-        name : "F-008-401"
-    },
-    {
-        category : "F-008",
-        color : "3f0305",
-        name : "F-008-403"
-    },
-    {
-        category : "F-008",
-        color : "501b08",
-        name : "F-008-406"
-    },
-    {
-        category : "F-018",
-        color : "030303",
-        name : "F-018-100"
-    },
-    {
-        category : "F-018",
-        color : "121015",
-        name : "F-018-101"
-    },
-    {
-        category : "F-018",
-        color : "8d706d",
-        name : "F-018-102"
-    },
-    {
-        category : "F-018",
-        color : "9a3d03",
-        name : "F-018-106"
-    },
-    {
-        category : "F-018",
-        color : "a45b32",
-        name : "F-018-114"
-    },
-    {
-        category : "F-018",
-        color : "c54100",
-        name : "F-018-133"
-    },
-    {
-        category : "F-018",
-        color : "a91913",
-        name : "F-018-134"
-    },
-    {
-        category : "F-018",
-        color : "480f08",
-        name : "F-018-135"
-    },
-    {
-        category : "F-018",
-        color : "47151b",
-        name : "F-018-137"
-    },
-    {
-        category : "F-018",
-        color : "101453",
-        name : "F-018-138"
-    },
-    {
-        category : "F-018",
-        color : "46271c",
-        name : "F-018-142"
-    },
+        category : "italian",
+        list : [
+            "5e602e",
+            "130f10",
+            "191219",
+            "6d432b",
+            "847e4c",
+            "271919",
+            "4f3e24",
+            "221819",
+            "6d5145",
+            "562118",
+            "57230e",
+            "77280a",
+            "271314",
+            "9c7c63",
+            "37190f",
+            "261616",
+            "836f64",
+            "987360",
+            "611108",
+            "411917",
+            "1b161c",
+            "2f4576",
+            "926d53",
+            "8d6049",
+            "201519",
+            "a78059",
+            "181d17",
+            "905e3b",
+            "a88369",
+            "a28670",
+            "c9c6b3",
+            "3e1710",
+            "151419",
+            "24211c",
+            "7d250b",
+            "8d6f64",
+            "836857",
+            "84685d",
+            "c0b98d",
+            "afb4ad",
+            "2b1719",
+            "0e111a",
+            "2a1215",
+            "412d24",
+        ]
+    }
 ]
 //example data end
 
