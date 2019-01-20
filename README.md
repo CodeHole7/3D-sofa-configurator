@@ -150,5 +150,5 @@ SofaConfigurator -> lstElement;
 
 	{
         name : object.name, //unique name for this object
-        **model** : object //3ds models with sprites etc.
+        model : object //3ds models with sprites etc.
   	}
