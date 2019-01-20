@@ -75,41 +75,41 @@ And these information will be used to create add ( + ) sprites for every sofa el
 
 	{
 
-        **name** : "LV8005",        //category
-        **thumbImage** : 'images/jori-glove-pure-2018.jpg', //thumb image url for this category
-        **description** : "Cuno Frommherz",  //description
-        **components** : [
+        name 				: "LV8005",        //category
+        thumbImage 			: 'images/jori-glove-pure-2018.jpg', //thumb image url for this category
+        description			: "Cuno Frommherz",  //description
+        components 			: [
             //real sofa element
 			{
-                **name** : "LV8005 1",
-                **thumbImage** : "LV8005-1.jpg", //thumb image url for this item
-                **data** : "LV8005-1.3DS", //indicate model file url
+                name 			: "LV8005 1",
+                thumbImage 		: "LV8005-1.jpg", //thumb image url for this item
+                data 			: "LV8005-1.3DS", //indicate model file url
              	//expanding information
-                **combineInfo** : {
-                    **backChair**   : ['top'],
-                    **leftTop**     : [false,false],
-                    **rightTop**    : [false,true],
-                    **rightBottom** : [true,false],
-                    **leftBottom**  : [false,false]
+                combineInfo : {
+                    backChair   : ['top'],
+                    leftTop     : [false,false],
+                    rightTop    : [false,true],
+                    rightBottom : [true,false],
+                    leftBottom  : [false,false]
                 }
             },
             {
-                **name** : "LV8005 3",
-                **thumbImage** : "LV8005-3.jpg",
-                **data** : "LV8005-3.3DS",
-                **combineInfo** : {
-                    **backChair**   : ['top'],
-                    **leftTop**     : [true,false],
-                    **rightTop**    : [false,true],
-                    **rightBottom** : [true,false],
-                    **leftBottom**  : [false,true]
+                name : "LV8005 3",
+                thumbImage : "LV8005-3.jpg",
+                data : "LV8005-3.3DS",
+                combineInfo : {
+                    backChair   : ['top'],
+                    leftTop     : [true,false],
+                    rightTop    : [false,true],
+                    rightBottom : [true,false],
+                    leftBottom  : [false,true]
                 }
             },
             ................................................................
             {
-                **name** : "LV8005 B6",
-                **thumbImage** : "LV8005-B6.jpg",
-                **data** : "LV8005-B6.3DS"
+                name : "LV8005 B6",
+                thumbImage : "LV8005-B6.jpg",
+                data : "LV8005-B6.3DS"
             },
         ]
     },
@@ -118,8 +118,8 @@ And these information will be used to create add ( + ) sprites for every sofa el
 
 	lstColor = [
 	    {
-	        **category** : "bonded", //leather type
-	        **list** : [
+	        category : "bonded", //leather type
+	        list : [
 	            "9d4f0d", //color value(rgb hex)
 	            "706166",
 	            "3c1a1b",
@@ -127,15 +127,15 @@ And these information will be used to create add ( + ) sprites for every sofa el
 	        ]
 	    },
 	    {
-	        **category** : "genuine",
-	        **list** : [
+	        category : "genuine",
+	        list : [
 	            "414352",
 	            "6b7380"
 	        ]
 	    },
 	    {
-	        **category** : "italian",
-	        **list** : [
+	        category : "italian",
+	        list : [
 	            "5e602e",
 	             "412d24",
 	        ]	    
@@ -149,6 +149,6 @@ SofaConfigurator -> lstElement;
 **Structure**
 
 	{
-        **name** : object.name, //unique name for this object
+        name : object.name, //unique name for this object
         **model** : object //3ds models with sprites etc.
   	}
