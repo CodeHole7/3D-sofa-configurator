@@ -462,8 +462,7 @@ $('document').ready(function(){
     CategoryLoader();
     $('#sofa-config-panel').hide();
     $('.btn-back').click(function(){
-        $('#category-list').show();
-        $('#sofa-config-panel').hide();
+         location.reload();
     })
 
     $('.toggle-collapse').click(function(){
