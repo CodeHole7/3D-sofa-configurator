@@ -4,6 +4,10 @@ var SofaConfigurator = function(item){
     var fullItemList = item.components;
     var lstCubeCameras = [];
 
+    var currentMapTexture = null;
+    var currentBumpTexture = null;
+    var currentPrimaryColor = null;
+    var currentSecondaryColor = null;
     ////////////////////////////////////////////
     //Initialize DOM
     ////////////////////////////////////////////
@@ -61,20 +65,71 @@ var SofaConfigurator = function(item){
             var bbox = new THREE.Box3().setFromObject(object);
             
             object.boundingBox = bbox;
-            
+            console.log('primary color ',currentPrimaryColor,'secondary color',currentSecondaryColor)
             //set default material to object
             for(var j in object.children){
                 object.children[j].castShadow = true;
                 object.children[j].receiveShadow = true;
-                if(object.children[j].name.includes('CG-1') || object.children[j].name.includes('CG-2'))
+                if(currentMapTexture && currentBumpTexture)
                 {
-                    object.children[j].material = new THREE.MeshStandardMaterial({
-                        color : 0x888888,
-                        metalness : 0.4,
-                        roughness : 0.8,
-                    });
+                    if(object.children[j].name.includes('CG-1') || object.children[j].name.includes('CG-2'))
+                    {
+                        if(currentMapTexture && currentBumpTexture){
+                            if(currentPrimaryColor && object.children[j].name.includes('CG-1')){
+                                var textureMaterial = new THREE.MeshStandardMaterial({
+                                    bumpMap : currentBumpTexture,
+                                    color : '#'+currentPrimaryColor,
+                                    metalness : 0.6,
+                                    roughness : 0.8,
+                                })
+
+                                object.children[j].material = textureMaterial;
+                            }
+                            
+                            else if(currentSecondaryColor && object.children[j].name.includes('CG-2')){
+                                var textureMaterial = new THREE.MeshStandardMaterial({
+                                    bumpMap : currentBumpTexture,
+                                    color : '#'+currentSecondaryColor,
+                                    metalness : 0.6,
+                                    roughness : 0.8,
+                                })
+
+                                object.children[j].material = textureMaterial;
+                            }
+                            else{
+                                var textureMaterial = new THREE.MeshStandardMaterial({
+                                    bumpMap : currentBumpTexture,
+                                    map : currentMapTexture,
+                                    metalness : 0.6,
+                                    roughness : 0.8,
+                                })
+
+                                object.children[j].material = textureMaterial;
+                            }
+                        }
+                        
+                        else{
+                            var textureMaterial = new THREE.MeshStandardMaterial({
+                                color : 0x808080,
+                                metalness : 0.6,
+                                roughness : 0.8,
+                            })
+                            object.children[j].material = textureMaterial;
+                        }
+                    }
                 }
-                else if(object.children[j].name.includes('metal')){
+                else{
+                    if(object.children[j].name.includes('CG-1') || object.children[j].name.includes('CG-2'))
+                    {
+                        object.children[j].material = new THREE.MeshStandardMaterial({
+                            color : 0x888888,
+                            metalness : 0.4,
+                            roughness : 0.8,
+                        });
+                    }
+                }
+                
+                if(object.children[j].name.includes('metal')){
                     var tmpBBox = new THREE.Box3().setFromObject(object.children[j])
 
                     cubeCamera = new THREE.CubeCamera(  1, 100000, 128 );
@@ -92,7 +147,6 @@ var SofaConfigurator = function(item){
                         envMap : cubeCamera.renderTarget.texture,
                         reflectivity : 0.9,
                     })
-                    console.log(object.children[j].material)
                 }
                 else if(object.children[j].name.includes('glass')){
                     object.children[j].material = new THREE.MeshPhongMaterial({
@@ -218,114 +272,122 @@ var SofaConfigurator = function(item){
     $('.additional-component').click(function(){
         var name = $(this).attr('cat');
         console.log('addtional component clicked',name);
-        createNewComponent(name,function(object){
-            var parentGizmo = combiningParent.boundingBox;
-            var parentPosition = combiningParent.position;
-            var parentRotation = combiningParent.rotation;
-            console.log(parentGizmo)
-            console.log(parentPosition)
-            console.log(parentRotation)
-            console.log(parentGizmo.min.z,object.boundingBox.max.z)
-            switch(combiningDirection){
-                case 'left'  :
-                    if(parentRotation.z == 0) //0deg
-                    {
-                        console.log(parentGizmo.max.x,object.boundingBox.max.x)
-                        object.position.z = -(parentGizmo.max.z - object.boundingBox.min.z)+parentPosition.z;
-                        object.position.x = (parentGizmo.max.x - object.boundingBox.max.x) + parentPosition.x;
-                    }
-                    else if(parentRotation.z == -Math.PI/2) //90deg
-                    {
-                        object.position.x = (parentGizmo.max.z - object.boundingBox.min.z) + parentPosition.x;
-                        object.position.z = (parentGizmo.max.x - object.boundingBox.max.x) + parentPosition.z;
-                        object.rotation.z = parentRotation.z
-                    }
-                    else if(parentRotation.z == -Math.PI) //180deg
-                    {
-                        object.position.z = (parentGizmo.max.z - object.boundingBox.min.z)+parentPosition.z;
-                        object.position.x = -(parentGizmo.max.x - object.boundingBox.max.x) + parentPosition.x;
-                        object.rotation.z = parentRotation.z;
-                    }
-                    else if(parentRotation.z == -Math.PI * 3/2) //270deg
-                    {
-                        object.position.x = -(parentGizmo.max.z - object.boundingBox.min.z)+parentPosition.x;
-                        object.position.z = -(parentGizmo.max.x - object.boundingBox.max.x) + parentPosition.z;
-                        object.rotation.z = parentRotation.z
-                    }
-                    break;
-                case 'right' :
-                    if(parentRotation.z == 0) //0deg
-                    {
-                        object.position.z = -(parentGizmo.min.z - object.boundingBox.max.z)+parentPosition.z;
-                        object.position.x = (parentGizmo.max.x - object.boundingBox.max.x) + parentPosition.x;
-                    }
-                    else if(parentRotation.z == -Math.PI/2) //90deg
-                    {
-                        object.position.x = (parentGizmo.min.z - object.boundingBox.max.z) + parentPosition.x;
-                        object.position.z = (parentGizmo.max.x - object.boundingBox.max.x) + parentPosition.z;
-                        object.rotation.z = parentRotation.z
-                    }
-                    else if(parentRotation.z == -Math.PI) //180deg
-                    {
-                        object.position.z = (parentGizmo.min.z - object.boundingBox.max.z)+parentPosition.z;
-                        object.position.x = -(parentGizmo.max.x - object.boundingBox.max.x) + parentPosition.x;
-                        object.rotation.z = parentRotation.z;
-                    }
-                    else if(parentRotation.z == -Math.PI * 3/2) //270deg
-                    {
-                        object.position.x = -(parentGizmo.min.z - object.boundingBox.max.z)+parentPosition.x;
-                        object.position.z = -(parentGizmo.max.x - object.boundingBox.max.x) + parentPosition.z;
-                        object.rotation.z = parentRotation.z
-                    }
-                    break;
-                case 'bottom' :
-                    if(parentRotation.z == 0) //0deg
-                    {
-                        object.position.x = (parentGizmo.min.x - object.boundingBox.max.z) + parentPosition.x;
-                        object.position.z = (parentGizmo.max.z - object.boundingBox.max.x) + parentPosition.z;
-                        object.rotation.z = -Math.PI/2;
-                    }
-                    else if(parentRotation.z == -Math.PI/2) //90deg
-                    {
-                        object.position.z = (parentGizmo.min.x - object.boundingBox.max.z) + parentPosition.z;
-                        object.position.x = -(parentGizmo.max.z - object.boundingBox.max.x) + parentPosition.x;
-                        object.rotation.z = -Math.PI;
-                    }
-                    else if(parentRotation.z == -Math.PI) //180deg
-                    {
-                        object.position.x = -(parentGizmo.min.x - object.boundingBox.max.z) + parentPosition.x;
-                        object.position.z = -(parentGizmo.max.z - object.boundingBox.max.x) + parentPosition.z;
-                        object.rotation.z = -Math.PI * 3/2;
-                    }
-                    else if(parentRotation.z == -Math.PI * 3/2) //270deg
-                    {
-                        object.position.z = -(parentGizmo.min.x - object.boundingBox.max.z) + parentPosition.z;
-                        object.position.x = +(parentGizmo.max.z - object.boundingBox.max.x) + parentPosition.x;
-                        object.rotation.z = 0;
-                    }
-                    break;
-                default:
-                    break;
-            }
-            //add to list
-            scene.add(object)
-
-            lstElement.push({
-                name : object.name,
-                model : object
-            })
-
-            //add to UndoManager
-            undoManager.add({
-                undo : function(){
-                    scene.remove(object);
-                    control.detach();
-                },
-                redo : function(){
-                    scene.add(object);
+        if(combiningParent && combiningDirection)
+        {
+            createNewComponent(name,function(object){
+                console.log(combiningParent,combiningDirection)
+                
+                var parentGizmo = combiningParent.boundingBox;
+                var parentPosition = combiningParent.position;
+                var parentRotation = combiningParent.rotation;
+                console.log(parentGizmo)
+                console.log(parentPosition)
+                console.log(parentRotation)
+                console.log(parentGizmo.min.z,object.boundingBox.max.z)
+                switch(combiningDirection){
+                    case 'left'  :
+                        if(parentRotation.z == 0) //0deg
+                        {
+                            console.log(parentGizmo.max.x,object.boundingBox.max.x)
+                            object.position.z = -(parentGizmo.max.z - object.boundingBox.min.z)+parentPosition.z;
+                            object.position.x = (parentGizmo.max.x - object.boundingBox.max.x) + parentPosition.x;
+                        }
+                        else if(parentRotation.z == -Math.PI/2) //90deg
+                        {
+                            object.position.x = (parentGizmo.max.z - object.boundingBox.min.z) + parentPosition.x;
+                            object.position.z = (parentGizmo.max.x - object.boundingBox.max.x) + parentPosition.z;
+                            object.rotation.z = parentRotation.z
+                        }
+                        else if(parentRotation.z == -Math.PI) //180deg
+                        {
+                            object.position.z = (parentGizmo.max.z - object.boundingBox.min.z)+parentPosition.z;
+                            object.position.x = -(parentGizmo.max.x - object.boundingBox.max.x) + parentPosition.x;
+                            object.rotation.z = parentRotation.z;
+                        }
+                        else if(parentRotation.z == -Math.PI * 3/2) //270deg
+                        {
+                            object.position.x = -(parentGizmo.max.z - object.boundingBox.min.z)+parentPosition.x;
+                            object.position.z = -(parentGizmo.max.x - object.boundingBox.max.x) + parentPosition.z;
+                            object.rotation.z = parentRotation.z
+                        }
+                        break;
+                    case 'right' :
+                        if(parentRotation.z == 0) //0deg
+                        {
+                            object.position.z = -(parentGizmo.min.z - object.boundingBox.max.z)+parentPosition.z;
+                            object.position.x = (parentGizmo.max.x - object.boundingBox.max.x) + parentPosition.x;
+                        }
+                        else if(parentRotation.z == -Math.PI/2) //90deg
+                        {
+                            object.position.x = (parentGizmo.min.z - object.boundingBox.max.z) + parentPosition.x;
+                            object.position.z = (parentGizmo.max.x - object.boundingBox.max.x) + parentPosition.z;
+                            object.rotation.z = parentRotation.z
+                        }
+                        else if(parentRotation.z == -Math.PI) //180deg
+                        {
+                            object.position.z = (parentGizmo.min.z - object.boundingBox.max.z)+parentPosition.z;
+                            object.position.x = -(parentGizmo.max.x - object.boundingBox.max.x) + parentPosition.x;
+                            object.rotation.z = parentRotation.z;
+                        }
+                        else if(parentRotation.z == -Math.PI * 3/2) //270deg
+                        {
+                            object.position.x = -(parentGizmo.min.z - object.boundingBox.max.z)+parentPosition.x;
+                            object.position.z = -(parentGizmo.max.x - object.boundingBox.max.x) + parentPosition.z;
+                            object.rotation.z = parentRotation.z
+                        }
+                        break;
+                    case 'bottom' :
+                        if(parentRotation.z == 0) //0deg
+                        {
+                            object.position.x = (parentGizmo.min.x - object.boundingBox.max.z) + parentPosition.x;
+                            object.position.z = (parentGizmo.max.z - object.boundingBox.max.x) + parentPosition.z;
+                            object.rotation.z = -Math.PI/2;
+                        }
+                        else if(parentRotation.z == -Math.PI/2) //90deg
+                        {
+                            object.position.z = (parentGizmo.min.x - object.boundingBox.max.z) + parentPosition.z;
+                            object.position.x = -(parentGizmo.max.z - object.boundingBox.max.x) + parentPosition.x;
+                            object.rotation.z = -Math.PI;
+                        }
+                        else if(parentRotation.z == -Math.PI) //180deg
+                        {
+                            object.position.x = -(parentGizmo.min.x - object.boundingBox.max.z) + parentPosition.x;
+                            object.position.z = -(parentGizmo.max.z - object.boundingBox.max.x) + parentPosition.z;
+                            object.rotation.z = -Math.PI * 3/2;
+                        }
+                        else if(parentRotation.z == -Math.PI * 3/2) //270deg
+                        {
+                            object.position.z = -(parentGizmo.min.x - object.boundingBox.max.z) + parentPosition.z;
+                            object.position.x = +(parentGizmo.max.z - object.boundingBox.max.x) + parentPosition.x;
+                            object.rotation.z = 0;
+                        }
+                        break;
+                    default:
+                        break;
                 }
+                //add to list
+                scene.add(object)
+
+                lstElement.push({
+                    name : object.name,
+                    model : object
+                })
+
+                //add to UndoManager
+                undoManager.add({
+                    undo : function(){
+                        scene.remove(object);
+                        control.detach();
+                    },
+                    redo : function(){
+                        scene.add(object);
+                    }
+                })
+
+                combiningParent = null;
+                combiningDirection = null;
             })
-        })
+        }
     })
 
     /*
@@ -374,6 +436,7 @@ var SofaConfigurator = function(item){
             'texture/'+texture+'.jpg',
             function(texture){
                 textureImage = texture;
+                currentMapTexture = texture;
             },
             null,
             function(err){
@@ -386,6 +449,7 @@ var SofaConfigurator = function(item){
             'texture/'+texture+'-bump.jpg',
             function(texture){
                 bumpImage = texture;
+                currentBumpTexture = texture;
             },
             null,
             function(err){
@@ -394,6 +458,8 @@ var SofaConfigurator = function(item){
         );
 
         setTimeout(() => {
+            currentPrimaryColor = null;
+            currentSecondaryColor = null;
             textureImage.wrapS = THREE.RepeatWrapping;
             textureImage.wrapT = THREE.RepeatWrapping;
 
@@ -525,6 +591,7 @@ var SofaConfigurator = function(item){
     })
     function setPrimaryColor(color){
         var beforeLstElement =[];
+        currentPrimaryColor = color;
         for(var i in lstElement){
             var item = lstElement[i].model;
             beforeLstElement[i] = [];
@@ -582,6 +649,9 @@ var SofaConfigurator = function(item){
     }
     function setSecondaryColor(color){
         var beforeLstElement =[];
+        currentSecondaryColor = color;
+
+        console.log(currentPrimaryColor,currentSecondaryColor)
         for(var i in lstElement){
             var item = lstElement[i].model;
             beforeLstElement[i] = [];
