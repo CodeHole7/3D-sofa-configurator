@@ -1,4 +1,6 @@
 # 3D Sofa Price Calculator
+ ![Positioning Example](screenshots/9.png)
+  ![Positioning Example](screenshots/8.png)
 ## Project Folder Structure
 
 ### models 
