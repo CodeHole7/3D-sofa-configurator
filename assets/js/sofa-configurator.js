@@ -76,9 +76,15 @@ var SofaConfigurator = function(item){
                     {
                         if(currentMapTexture && currentBumpTexture){
                             if(currentPrimaryColor && object.children[j].name.includes('CG-1')){
+                                var colorRGB = new THREE.Color('#'+currentPrimaryColor);
+                                var colorHSL = colorRGB.getHSL();
+                                console.log('hsl ',colorHSL)
+                                var newColor = new THREE.Color();
+                                newColor.setHSL(colorHSL.h , colorHSL.s * 1.2 , colorHSL.l * 0.3)
+
                                 var textureMaterial = new THREE.MeshStandardMaterial({
                                     bumpMap : currentBumpTexture,
-                                    color : '#'+currentPrimaryColor,
+                                    color : newColor,
                                     metalness : 0.6,
                                     roughness : 0.8,
                                 })
@@ -87,9 +93,15 @@ var SofaConfigurator = function(item){
                             }
                             
                             else if(currentSecondaryColor && object.children[j].name.includes('CG-2')){
+                                var colorRGB = new THREE.Color('#'+currentSecondaryColor);
+                                var colorHSL = colorRGB.getHSL();
+                                console.log('hsl ',colorHSL)
+                                var newColor = new THREE.Color();
+                                newColor.setHSL(colorHSL.h , colorHSL.s * 1.2 , colorHSL.l * 0.3)
+
                                 var textureMaterial = new THREE.MeshStandardMaterial({
                                     bumpMap : currentBumpTexture,
-                                    color : '#'+currentSecondaryColor,
+                                    color : newColor,
                                     metalness : 0.6,
                                     roughness : 0.8,
                                 })
@@ -384,8 +396,9 @@ var SofaConfigurator = function(item){
                     }
                 })
 
-                combiningParent = null;
-                combiningDirection = null;
+                combiningParent = object;
+                // combiningParent = null;
+                // combiningDirection = null;
             })
         }
     })
@@ -605,7 +618,14 @@ var SofaConfigurator = function(item){
                 if(item.children[j].name.includes('CG-1') == true)
                 {
                     var newMat = item.children[j].material.clone();
-                    newMat.color.set('#'+color);
+
+                    var colorRGB = new THREE.Color('#'+color);
+                    var colorHSL = colorRGB.getHSL();
+                    console.log('hsl ',colorHSL)
+                    var newColor = new THREE.Color();
+                    newColor.setHSL(colorHSL.h , colorHSL.s * 1.2 , colorHSL.l * 0.3)
+
+                    newMat.color = newColor;
                     newMat.map = null;
                     newMat.needsUpdate = true;
 
@@ -666,7 +686,14 @@ var SofaConfigurator = function(item){
                 if(item.children[j].name.includes('CG-2') == true)
                 {
                     var newMat = item.children[j].material.clone();
-                    newMat.color.set('#'+color);
+
+                    var colorRGB = new THREE.Color('#'+color);
+                    var colorHSL = colorRGB.getHSL();
+                    console.log('hsl ',colorHSL)
+                    var newColor = new THREE.Color();
+                    newColor.setHSL(colorHSL.h , colorHSL.s * 1.2 , colorHSL.l * 0.3)
+
+                    newMat.color = newColor;
                     newMat.map = null;
                     newMat.needsUpdate = true;
 
