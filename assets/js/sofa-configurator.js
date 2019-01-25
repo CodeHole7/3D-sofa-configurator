@@ -278,6 +278,8 @@ var SofaConfigurator = function(item){
                     scene.add(object);
                 }
             })
+            console.log('trigger')
+            $('.custom-nav-item[data-cat="additional"]').trigger('click');
         });
     })
 
@@ -623,7 +625,7 @@ var SofaConfigurator = function(item){
                     var colorHSL = colorRGB.getHSL();
                     console.log('hsl ',colorHSL)
                     var newColor = new THREE.Color();
-                    newColor.setHSL(colorHSL.h , colorHSL.s * 1.2 , colorHSL.l * 0.3)
+                    newColor.setHSL(colorHSL.h , colorHSL.s * 1.2 , colorHSL.l * 0.2)
 
                     newMat.color = newColor;
                     newMat.map = null;
@@ -691,7 +693,7 @@ var SofaConfigurator = function(item){
                     var colorHSL = colorRGB.getHSL();
                     console.log('hsl ',colorHSL)
                     var newColor = new THREE.Color();
-                    newColor.setHSL(colorHSL.h , colorHSL.s * 1.2 , colorHSL.l * 0.3)
+                    newColor.setHSL(colorHSL.h , colorHSL.s * 1.2 , colorHSL.l * 0.2)
 
                     newMat.color = newColor;
                     newMat.map = null;
