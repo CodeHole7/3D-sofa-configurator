@@ -129,6 +129,9 @@ THREE.TransformControls = function ( camera, domElement ) {
 	};
 
 	//Get current object
+	this.startAutomatical = function(event){
+		onPointerDown(event)
+	}
 	this.getCurrent = function () {
 		return this.object;
 	}
@@ -331,17 +334,7 @@ THREE.TransformControls = function ( camera, domElement ) {
 			if ( axis.search( 'Z' ) === -1 ) {
 				pointEnd.z = pointStart.z;
 			}
-			scope.dispatchEvent({
-				type : 'control-moving',
-				value : {
-					dx : pointEnd.x - pointStart.x,
-					dy : pointEnd.y - pointStart.y,
-					dz : pointEnd.z - pointStart.z,
-					lx : pointEnd.x,
-					ly : pointEnd.y,
-					lz : pointEnd.z,
-				}
-			})
+			
 			// Apply translate
 
 			if ( space === 'local' ) {
@@ -353,6 +346,15 @@ THREE.TransformControls = function ( camera, domElement ) {
 			object.position.add( _positionStart );
 
 			// Apply translation snap
+			console.log(object.position)
+			scope.dispatchEvent({
+				type : 'control-moving',
+				value : {
+					x : object.position.x,
+					y : object.position.y,
+					z : object.position.z,
+				}
+			})
 
 			if ( this.translationSnap ) {
 
@@ -397,7 +399,6 @@ THREE.TransformControls = function ( camera, domElement ) {
 					if ( object.parent ) {
 						object.position.sub( _tempVector.setFromMatrixPosition( object.parent.matrixWorld ) );
 					}
-
 				}
 
 			}
@@ -1371,10 +1372,8 @@ THREE.TransformControlsGizmo = function () {
 					handle.material.color.lerp( new THREE.Color( 1, 1, 1 ), 0.5 );
 
 				} else {
-
 					handle.material.opacity *= 0;
 					handle.material.color.lerp( new THREE.Color( 1, 1, 1 ), 0.5 );
-
 				}
 
 			}

@@ -62,7 +62,7 @@ var SofaConfigurator = function(item){
         loader.load("models/"+name,function(object){
             object.rotation.x = -Math.PI / 2;
             object.castShadow = true;
-            object.name = name + '-' + Date().toString().replace(/\s/g, '');
+            object.name = name + '-' + Date().toString().replace(/\s/g, '')+Math.random();
             //consone.log('parent',combiningParent);
             if(!combiningParent)
             {
@@ -891,14 +891,13 @@ var SofaConfigurator = function(item){
                         // if(array[j] === currentObject.name) continue;
                         if(j == array.indexOf(currentObject.name)) continue;
                         var obj = scene.getObjectByName(array[j]);
-                        // console.log(transformBeforeMovingPos);
-                        // obj.position.x = (obj.position.x - transformBeforeMovingPos.x) + currentObject.position.x;
-                        // obj.position.y += event.value.dy;
-                        // obj.position.z += event.value.dz;
-                        var dx = (currentObject.position.x - transformBeforeMovingGroup[array.indexOf(currentObject.name)].x)
-                        var dz = (currentObject.position.z - transformBeforeMovingGroup[array.indexOf(currentObject.name)].z)
-                        obj.position.x = transformBeforeMovingGroup[j].x + dx;
-                        obj.position.z = transformBeforeMovingGroup[j].z + dz;
+                        var dx = (event.value.x - transformBeforeMovingGroup[array.indexOf(currentObject.name)].x)
+                        var dz = (event.value.z - transformBeforeMovingGroup[array.indexOf(currentObject.name)].z)
+                        if(obj)
+                        {
+                            obj.position.x = transformBeforeMovingGroup[j].x + dx;
+                            obj.position.z = transformBeforeMovingGroup[j].z + dz;
+                        }
                     }
                 }
             }
@@ -921,8 +920,14 @@ var SofaConfigurator = function(item){
                     if(array.includes(currentObject.name)){
                         for(var j in array){
                             var obj = scene.getObjectByName(array[j])
-                            var newObj = obj.clone();
-                            transformBeforeMovingGroup.push(newObj.position);
+                            if(obj)
+                            {
+                                var newObj = obj.clone();
+                                transformBeforeMovingGroup.push(newObj.position);
+                            }
+                            else{
+                                transformBeforeMovingGroup.push({});
+                            }
                         }
                     }
                 }
@@ -970,6 +975,7 @@ var SofaConfigurator = function(item){
                 })
 
                 control.detach();
+                // orbit.enabled = true;
             }
         });
         scene.add(control);
@@ -1026,6 +1032,7 @@ var SofaConfigurator = function(item){
     function checkClickedEvent(event){
         if(event.button == 0 && orbit.enabled == true)
         {
+            // control.detach();
             var objects = [];
             for(var i in lstElement){
                 var checkExist = scene.getObjectByName(lstElement[i].model.name);
@@ -1064,7 +1071,6 @@ var SofaConfigurator = function(item){
                                 var tmp = group.children[i].position.x;
                                 group.children[i].position.x = - group.children[i].position.y;
                                 group.children[i].position.y = tmp;
-
                             }
                         }
 
@@ -1217,7 +1223,12 @@ var SofaConfigurator = function(item){
                     }
 
                     //attach to transform gizmo
+
+                    // var movingGroupMeshes = new THREE.Group();
+                    // movingGroupMeshes.add(group);
                     control.attach(group);
+                    control.enabled = true;
+                    control.startAutomatical(event)
                     orbit.enabled = false;
                 }
             }
