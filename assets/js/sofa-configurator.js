@@ -532,7 +532,7 @@ var SofaConfigurator = function(item){
                     }
                 }
             })
-        }, 500);
+        }, 700);
     }
 
     //leather management
