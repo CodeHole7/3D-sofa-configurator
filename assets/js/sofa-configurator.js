@@ -1,5 +1,7 @@
 var SofaConfigurator = function(item){
     var lstElement = [];
+    var group = [];
+    
     var undoManager = new UndoManager();
     var fullItemList = item.components;
     var lstCubeCameras = [];
@@ -179,7 +181,11 @@ var SofaConfigurator = function(item){
             //add sprites for control handlers
             //sprite for rotate
             var spriteRotateMap = new THREE.TextureLoader().load( 'texture/sprite-rotate.png' );
-            var spriteRotateMaterial = new THREE.SpriteMaterial( { map: spriteRotateMap, color: 0xffffff } );
+            var spriteRotateMaterial = new THREE.SpriteMaterial( { 
+                map: spriteRotateMap, 
+                color: 0xffffff, 
+                opacity : 0.4 
+            } );
             var spriteRotate = new THREE.Sprite( spriteRotateMaterial );
             spriteRotate.scale.set(200, 200, 1)
             spriteRotate.position.set(0,-200,bbox.max.y+200);
@@ -189,7 +195,11 @@ var SofaConfigurator = function(item){
 
             //sprite for delete
             var spriteDeleteMap = new THREE.TextureLoader().load( 'texture/sprite-delete.png' );
-            var spriteDeleteMaterial = new THREE.SpriteMaterial( { map: spriteDeleteMap, color: 0xffffff } );
+            var spriteDeleteMaterial = new THREE.SpriteMaterial( { 
+                map: spriteDeleteMap, 
+                color: 0xffffff,
+                opacity : 0.4 
+            } );
             var spriteDelete = new THREE.Sprite( spriteDeleteMaterial );
             spriteDelete.scale.set(200, 200, 1)
             spriteDelete.position.set(0,200,bbox.max.y+200);
@@ -209,7 +219,11 @@ var SofaConfigurator = function(item){
             {
                 var combineInfo = currentItem.combineInfo;
                 var spriteAddMap = new THREE.TextureLoader().load( 'texture/sprite-add.png' );
-                var spriteAddMaterial = new THREE.SpriteMaterial( { map: spriteAddMap, color: 0xffffff } );
+                var spriteAddMaterial = new THREE.SpriteMaterial( { 
+                    map: spriteAddMap, 
+                    color: 0xffffff,
+                    opacity : 0.4 ,
+                } );
 
                 if(combineInfo.leftTop[0] == true)
                 {
@@ -903,9 +917,51 @@ var SofaConfigurator = function(item){
         
         window.addEventListener( 'resize', onResize, false );
         renderer.domElement.addEventListener('mousedown',checkClickedEvent,false);
+        renderer.domElement.addEventListener('mousemove',checkHoverEvent,false);
     }
 
-    //interaction with mouse event
+    //interaction with mouse move event
+    function checkHoverEvent(event){
+        // console.log('hover event dispatcher')
+        var objects = [];
+        for(var i in lstElement){
+            var checkExist = scene.getObjectByName(lstElement[i].model.name);
+            if(checkExist)
+            {
+                for(var j in lstElement[i].model.children)
+                {
+                    objects.push(lstElement[i].model.children[j])
+                }
+            }
+        }
+
+        mouse.x = ( event.offsetX / renderer.domElement.clientWidth ) * 2 - 1;
+        mouse.y = - ( event.offsetY / renderer.domElement.clientHeight ) * 2 + 1;
+        
+        var raycaster = new THREE.Raycaster();
+        raycaster.setFromCamera( mouse, camera );
+        // scene.add(new THREE.ArrowHelper(raycaster.ray.direction, raycaster.ray.origin, 1000, 0xff0000) );
+        var intersects = raycaster.intersectObjects( objects );
+        if(intersects.length > 0){
+            var item = intersects[0];
+            if(item.object.name.includes('sprite')){
+                var mat = item.object.material.clone();
+                mat.opacity = 1;
+                item.object.material = mat;
+            }
+        }
+        else{
+            for(var i in objects){
+                if(objects[i] instanceof THREE.Sprite){
+                    var mat = objects[i].material.clone();
+                    // console.log(mat.opacity)
+                    mat.opacity = 0.4;
+                    objects[i].material = mat;
+                }
+            }
+        }
+    }
+    //interaction with mouse click event
     function checkClickedEvent(event){
         if(event.button == 0 && orbit.enabled == true)
         {
