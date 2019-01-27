@@ -1,7 +1,7 @@
 var SofaConfigurator = function(item){
     var lstElement = [];
-    var group = [];
-    
+    var movingGroup = [];
+
     var undoManager = new UndoManager();
     var fullItemList = item.components;
     var lstCubeCameras = [];
@@ -63,11 +63,30 @@ var SofaConfigurator = function(item){
             object.rotation.x = -Math.PI / 2;
             object.castShadow = true;
             object.name = name + '-' + Date().toString().replace(/\s/g, '');
-            
+            //consone.log('parent',combiningParent);
+            if(!combiningParent)
+            {
+                var array = [];
+                array.push(object.name);
+                movingGroup.push(array);   
+            }
+            else{
+                var parentName = combiningParent.name;
+                //consone.log('parent name ',parentName)
+                for(var i in movingGroup){
+                    var array = movingGroup[i];
+                    if(array.includes(parentName)){
+                        //consone.log('found moving group',array)
+                        array.push(object.name)
+                        break;
+                    }
+                }
+            }
+            console.log('group ',movingGroup)
             var bbox = new THREE.Box3().setFromObject(object);
             
             object.boundingBox = bbox;
-            console.log('primary color ',currentPrimaryColor,'secondary color',currentSecondaryColor)
+            //consone.log('primary color ',currentPrimaryColor,'secondary color',currentSecondaryColor)
             //set default material to object
             for(var j in object.children){
                 object.children[j].castShadow = true;
@@ -80,7 +99,7 @@ var SofaConfigurator = function(item){
                             if(currentPrimaryColor && object.children[j].name.includes('CG-1')){
                                 var colorRGB = new THREE.Color('#'+currentPrimaryColor);
                                 var colorHSL = colorRGB.getHSL();
-                                console.log('hsl ',colorHSL)
+                                //console.log('hsl ',colorHSL)
                                 var newColor = new THREE.Color();
                                 newColor.setHSL(colorHSL.h , colorHSL.s * 1.2 , colorHSL.l * 0.3)
 
@@ -97,7 +116,7 @@ var SofaConfigurator = function(item){
                             else if(currentSecondaryColor && object.children[j].name.includes('CG-2')){
                                 var colorRGB = new THREE.Color('#'+currentSecondaryColor);
                                 var colorHSL = colorRGB.getHSL();
-                                console.log('hsl ',colorHSL)
+                                //console.log('hsl ',colorHSL)
                                 var newColor = new THREE.Color();
                                 newColor.setHSL(colorHSL.h , colorHSL.s * 1.2 , colorHSL.l * 0.3)
 
@@ -173,7 +192,7 @@ var SofaConfigurator = function(item){
                         shininess : 100,
                         specular : 0xffffff,
                     })
-                    console.log('glass material',object.children[j].material);
+                    //console.log('glass material',object.children[j].material);
                 }
             }
 
@@ -228,7 +247,7 @@ var SofaConfigurator = function(item){
                 if(combineInfo.leftTop[0] == true)
                 {
                     var length = bbox.max.x - bbox.min.x;
-                    console.log(length < 950 ? 0 : (bbox.max.x - 400))
+                    //console.log(length < 950 ? 0 : (bbox.max.x - 400))
                     var spriteAddLeft = new THREE.Sprite( spriteAddMaterial );
                     spriteAddLeft.scale.set(200, 200, 1)
                     spriteAddLeft.position.set(length < 950 ? 0 : (bbox.max.x - 400),bbox.max.z + 200 ,100); 
@@ -248,7 +267,7 @@ var SofaConfigurator = function(item){
                 if(combineInfo.rightBottom[0] == true)
                 {
                     var length = bbox.max.x - bbox.min.x;
-                    console.log(length < 950 ? 0 : (bbox.max.x - 400))
+                    //console.log(length < 950 ? 0 : (bbox.max.x - 400))
                     var spriteAddRight = new THREE.Sprite( spriteAddMaterial );
                     spriteAddRight.scale.set(200, 200, 1)
                     spriteAddRight.position.set(length < 950 ? 0 : (bbox.max.x - 400),bbox.min.z - 200 ,100);
@@ -273,9 +292,11 @@ var SofaConfigurator = function(item){
 
     $('.single-component').click(function(){
         var name = $(this).attr('cat');
+        combiningParent = null;
+        combiningDirection = null;
         createNewComponent(name,function(object){
             //add to scene
-            console.log('create object',object)
+            //console.log('create object',object)
             scene.add(object)
 
             //add to list
@@ -294,31 +315,31 @@ var SofaConfigurator = function(item){
                     scene.add(object);
                 }
             })
-            console.log('trigger')
+            //console.log('trigger')
             $('.custom-nav-item[data-cat="additional"]').trigger('click');
         });
     })
 
     $('.additional-component').click(function(){
         var name = $(this).attr('cat');
-        console.log('addtional component clicked',name);
+        //console.log('addtional component clicked',name);
         if(combiningParent && combiningDirection)
         {
             createNewComponent(name,function(object){
-                console.log(combiningParent,combiningDirection)
+                //console.log(combiningParent,combiningDirection)
                 
                 var parentGizmo = combiningParent.boundingBox;
                 var parentPosition = combiningParent.position;
                 var parentRotation = combiningParent.rotation;
-                console.log(parentGizmo)
-                console.log(parentPosition)
-                console.log(parentRotation)
-                console.log(parentGizmo.min.z,object.boundingBox.max.z)
+                //console.log(parentGizmo)
+                //console.log(parentPosition)
+                //console.log(parentRotation)
+                //console.log(parentGizmo.min.z,object.boundingBox.max.z)
                 switch(combiningDirection){
                     case 'left'  :
                         if(parentRotation.z == 0) //0deg
                         {
-                            console.log(parentGizmo.max.x,object.boundingBox.max.x)
+                            //console.log(parentGizmo.max.x,object.boundingBox.max.x)
                             object.position.z = -(parentGizmo.max.z - object.boundingBox.min.z)+parentPosition.z;
                             object.position.x = (parentGizmo.max.x - object.boundingBox.max.x) + parentPosition.x;
                         }
@@ -471,7 +492,7 @@ var SofaConfigurator = function(item){
             },
             null,
             function(err){
-                console.log('failed')
+                //console.log('failed')
             }
         );
 
@@ -484,7 +505,7 @@ var SofaConfigurator = function(item){
             },
             null,
             function(err){
-                console.log('failed')
+                //console.log('failed')
             }
         );
 
@@ -639,7 +660,7 @@ var SofaConfigurator = function(item){
 
                     var colorRGB = new THREE.Color('#'+color);
                     var colorHSL = colorRGB.getHSL();
-                    console.log('hsl ',colorHSL)
+                    //console.log('hsl ',colorHSL)
                     var newColor = new THREE.Color();
                     newColor.setHSL(colorHSL.h , colorHSL.s * 1.2 , colorHSL.l * 0.2)
 
@@ -689,7 +710,7 @@ var SofaConfigurator = function(item){
         var beforeLstElement =[];
         currentSecondaryColor = color;
 
-        console.log(currentPrimaryColor,currentSecondaryColor)
+        //console.log(currentPrimaryColor,currentSecondaryColor)
         for(var i in lstElement){
             var item = lstElement[i].model;
             beforeLstElement[i] = [];
@@ -707,7 +728,7 @@ var SofaConfigurator = function(item){
 
                     var colorRGB = new THREE.Color('#'+color);
                     var colorHSL = colorRGB.getHSL();
-                    console.log('hsl ',colorHSL)
+                    //console.log('hsl ',colorHSL)
                     var newColor = new THREE.Color();
                     newColor.setHSL(colorHSL.h , colorHSL.s * 1.2 , colorHSL.l * 0.2)
 
@@ -766,7 +787,7 @@ var SofaConfigurator = function(item){
     var transformAfterMovingPos = {x : 0, y : 0, z : 0};
     var combiningParent = null;
     var combiningDirection = null;
-    
+    var transformBeforeMovingGroup = [];
     init();
     animate();
     function init() {
@@ -857,7 +878,33 @@ var SofaConfigurator = function(item){
         //transform controls
         control = new THREE.TransformControls( camera, renderer.domElement );
         
+        control.addEventListener( 'control-moving', function(event){
+            // console.log(event.value)
+            var currentObject = control.getCurrent();
+            //check moving groups
+            // console.log(transformBeforeMovingPos,currentObject.position)
+            // console.log('transform before group',transformBeforeMovingGroup)
+            for(var i in movingGroup){
+                var array = movingGroup[i];
+                if(array.includes(currentObject.name)){
+                    for(var j in array){
+                        // if(array[j] === currentObject.name) continue;
+                        if(j == array.indexOf(currentObject.name)) continue;
+                        var obj = scene.getObjectByName(array[j]);
+                        // console.log(transformBeforeMovingPos);
+                        // obj.position.x = (obj.position.x - transformBeforeMovingPos.x) + currentObject.position.x;
+                        // obj.position.y += event.value.dy;
+                        // obj.position.z += event.value.dz;
+                        var dx = (currentObject.position.x - transformBeforeMovingGroup[array.indexOf(currentObject.name)].x)
+                        var dz = (currentObject.position.z - transformBeforeMovingGroup[array.indexOf(currentObject.name)].z)
+                        obj.position.x = transformBeforeMovingGroup[j].x + dx;
+                        obj.position.z = transformBeforeMovingGroup[j].z + dz;
+                    }
+                }
+            }
+        })
         control.addEventListener( 'dragging-changed', function ( event ) {
+            console.log('dragging chaged',event)
             orbit.enabled = ! event.value;
             if(event.value == true)
             {
@@ -868,9 +915,21 @@ var SofaConfigurator = function(item){
                     transformBeforeMovingPos.y = currentObject.position.y;
                     transformBeforeMovingPos.z = currentObject.position.z;
                 }
+                transformBeforeMovingGroup = [];
+                for(var i in movingGroup){
+                    var array = movingGroup[i];
+                    if(array.includes(currentObject.name)){
+                        for(var j in array){
+                            var obj = scene.getObjectByName(array[j])
+                            var newObj = obj.clone();
+                            transformBeforeMovingGroup.push(newObj.position);
+                        }
+                    }
+                }
             }
             else{
                 var currentObject = control.getCurrent();
+                
                 if(currentObject instanceof THREE.Group){
                     transformAfterMovingPos.x = currentObject.position.x;
                     transformAfterMovingPos.y = currentObject.position.y;
@@ -909,6 +968,8 @@ var SofaConfigurator = function(item){
                         }
                     }
                 })
+
+                control.detach();
             }
         });
         scene.add(control);
@@ -922,7 +983,7 @@ var SofaConfigurator = function(item){
 
     //interaction with mouse move event
     function checkHoverEvent(event){
-        // console.log('hover event dispatcher')
+        // //consone.log('hover event dispatcher')
         var objects = [];
         for(var i in lstElement){
             var checkExist = scene.getObjectByName(lstElement[i].model.name);
@@ -954,7 +1015,7 @@ var SofaConfigurator = function(item){
             for(var i in objects){
                 if(objects[i] instanceof THREE.Sprite){
                     var mat = objects[i].material.clone();
-                    // console.log(mat.opacity)
+                    // //consone.log(mat.opacity)
                     mat.opacity = 0.4;
                     objects[i].material = mat;
                 }
@@ -1048,7 +1109,7 @@ var SofaConfigurator = function(item){
                         control.detach();
                         orbit.enabled = true;
                         scene.remove(group);
-                        console.log(group)
+                        //consone.log(group)
                         ////////////////////////////////////////////////
                         //add to undoManager
                         ////////////////////////////////////////////////
@@ -1079,7 +1140,7 @@ var SofaConfigurator = function(item){
                         control.detach();
                         orbit.enabled = true;
 
-                        console.log(item.object.name);
+                        //consone.log(item.object.name);
                         $('.custom-nav-item[data-cat="additional"]').trigger('click')
 
                         //add to left sprite
@@ -1157,9 +1218,11 @@ var SofaConfigurator = function(item){
 
                     //attach to transform gizmo
                     control.attach(group);
+                    orbit.enabled = false;
                 }
             }
             else{
+                control.detach();
                 // for(var i in lstElement){
                 //     for(var j in lstElement[i].model.children)
                 //     {
