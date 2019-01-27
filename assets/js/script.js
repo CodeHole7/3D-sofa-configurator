@@ -18,6 +18,18 @@ const lstCategory = [
                 }
             },
             {
+                name : "LV8005 A1",
+                thumbImage : "LV8005-A1.jpg",
+                data : "LV8005-A1.3DS",
+                combineInfo : {
+                    backChair   : ['top'],
+                    leftTop     : [true,false],
+                    rightTop    : [false,false],
+                    rightBottom : [false,false],
+                    leftBottom  : [false,true]
+                }
+            },
+            {
                 name : "LV8005 3",
                 thumbImage : "LV8005-3.jpg",
                 data : "LV8005-3.3DS",
@@ -66,6 +78,18 @@ const lstCategory = [
                 }
             },
             {
+                name : "LV8005 A5",
+                thumbImage : "LV8005-A5.jpg",
+                data : "LV8005-A5.3DS",
+                combineInfo : {
+                    backChair   : ['left'],
+                    leftTop     : [false,false],
+                    rightTop    : [false,true],
+                    rightBottom : [true,false],
+                    leftBottom  : [false,false]
+                }
+            },
+            {
                 name : "LV8005 B6",
                 thumbImage : "LV8005-B6.jpg",
                 data : "LV8005-B6.3DS"
@@ -87,6 +111,18 @@ const lstCategory = [
                     rightTop    : [false,true],
                     rightBottom : [true,false],
                     leftBottom  : [false,false]
+                }
+            },
+            {
+                name : "LV8013 A1",
+                thumbImage : "LV8013-A1.jpg",
+                data : "LV8013-A1.3DS",
+                combineInfo : {
+                    backChair   : ['top'],
+                    leftTop     : [true,false],
+                    rightTop    : [false,false],
+                    rightBottom : [false,false],
+                    leftBottom  : [false,true]
                 }
             },
             {
@@ -126,6 +162,18 @@ const lstCategory = [
                 }
             },
             {
+                name : "LV8013 A4",
+                thumbImage : "LV8013-A4.jpg",
+                data : "LV8013-A4.3DS",
+                combineInfo : {
+                    backChair   : ['top'],
+                    leftTop     : [false,false],
+                    rightTop    : [false,true],
+                    rightBottom : [true,false],
+                    leftBottom  : [false,false]
+                }
+            },
+            {
                 name : "LV8013 C5",
                 thumbImage : "LV8013-C5.jpg",
                 data : "LV8013-C5.3DS"
@@ -147,6 +195,18 @@ const lstCategory = [
                     rightTop    : [false,true],
                     rightBottom : [true,false],
                     leftBottom  : [false,false]
+                }
+            },
+            {
+                name : "LV8019 A1",
+                thumbImage : "LV8019-A1.jpg",
+                data : "LV8019-A1.3DS",
+                combineInfo : {
+                    backChair   : ['top'],
+                    leftTop     : [true,false],
+                    rightTop    : [false,false],
+                    rightBottom : [false,false],
+                    leftBottom  : [false,true]
                 }
             },
             {
@@ -194,6 +254,18 @@ const lstCategory = [
                     leftTop     : [true,false],
                     rightTop    : [false,false],
                     rightBottom : [false,false],
+                    leftBottom  : [false,false]
+                }
+            },
+            {
+                name : "LV8019 A5",
+                thumbImage : "LV8019-A5.jpg",
+                data : "LV8019-A5.3DS",
+                combineInfo : {
+                    backChair   : ['top'],
+                    leftTop     : [false,false],
+                    rightTop    : [false,true],
+                    rightBottom : [true,false],
                     leftBottom  : [false,false]
                 }
             },

@@ -254,7 +254,7 @@ var SofaConfigurator = function(item){
             fn(object)
         })
     }
-    
+
     $('.single-component').click(function(){
         var name = $(this).attr('cat');
         createNewComponent(name,function(object){
@@ -902,7 +902,6 @@ var SofaConfigurator = function(item){
         window.addEventListener( 'resize', onResize, false );
         renderer.domElement.addEventListener('mousedown',checkClickedEvent,false);
     }
-
 
     //interaction with mouse event
     function checkClickedEvent(event){

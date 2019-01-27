@@ -292,10 +292,16 @@ THREE.TransformControls = function ( camera, domElement ) {
 
 	this.pointerMove = function( pointer ) {
 
-		var axis = this.axis;
+		// var axis = this.axis;
 		var mode = this.mode;
 		var object = this.object;
 		var space = this.space;
+
+		var axis = "XZ";
+		// console.log('axis ',axis)
+		// console.log('object ',object);
+		// console.log('space', space)
+		// console.log('mode ',mode)
 
 		if ( mode === 'scale') {
 
@@ -312,15 +318,15 @@ THREE.TransformControls = function ( camera, domElement ) {
 		ray.setFromCamera( pointer, this.camera );
 
 		var planeIntersect = ray.intersectObjects( [ _plane ], true )[ 0 ] || false;
-
-		if ( planeIntersect === false ) return;
+		console.log('planeIntersect',planeIntersect)
+		// if ( planeIntersect === false ) return;
 
 		pointEnd.copy( planeIntersect.point ).sub( worldPositionStart );
 
 		if ( space === 'local' ) pointEnd.applyQuaternion( worldQuaternionStart.clone().inverse() );
 
 		if ( mode === 'translate' ) {
-
+			console.log('mode', mode)
 			if ( axis.search( 'X' ) === -1 ) {
 				pointEnd.x = pointStart.x;
 			}
