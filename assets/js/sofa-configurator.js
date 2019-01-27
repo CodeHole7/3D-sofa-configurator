@@ -233,9 +233,11 @@ var SofaConfigurator = function(item){
                 }
                 if(combineInfo.rightBottom[0] == true)
                 {
+                    var length = bbox.max.x - bbox.min.x;
+                    console.log(length < 950 ? 0 : (bbox.max.x - 400))
                     var spriteAddRight = new THREE.Sprite( spriteAddMaterial );
                     spriteAddRight.scale.set(200, 200, 1)
-                    spriteAddRight.position.set(0,bbox.min.z - 200 ,100);
+                    spriteAddRight.position.set(length < 950 ? 0 : (bbox.max.x - 400),bbox.min.z - 200 ,100);
                     spriteAddRight.name = "sprite-add-right";
                     // spriteAddRight.visible = false;
                     object.add(spriteAddRight);
