@@ -85,7 +85,7 @@ And these information will be used to create add ( + ) sprites for every sofa el
                 name 		: "LV8005 1",
                 thumbImage 		: "LV8005-1.jpg", //thumb image url for this item
                 data 		: "LV8005-1.3DS", //indicate model file url
-             //expanding information
+             	//expanding information
                 combineInfo : {
                     backChair   	: ['top'],
                     leftTop     	: [false,false],
