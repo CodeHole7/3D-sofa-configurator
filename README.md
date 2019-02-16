@@ -80,7 +80,7 @@ And these information will be used to create add ( + ) sprites for every sofa el
         thumbImage 			: 'images/jori-glove-pure-2018.jpg', //thumb image url for this category
         description			: "Cuno Frommherz",  //description
         components 			: [
-            //real sofa element
+        //real sofa element
 	    {
                 name 		: "LV8005 1",
                 thumbImage 		: "LV8005-1.jpg", //thumb image url for this item
