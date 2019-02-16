@@ -137,7 +137,7 @@ And these information will be used to create add ( + ) sprites for every sofa el
 	    {
 	        category : "italian",
 	        list : [
-	            "5e602e",
+	             "5e602e",
 	             "412d24",
 	        ]	    
 	    }
