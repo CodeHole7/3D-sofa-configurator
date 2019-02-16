@@ -1,4 +1,4 @@
-# 3D Sofa Price Calculator
+# 3D Sofa Configurator for E-Commerse
  ![Positioning Example](screenshots/9.png)
   ![Positioning Example](screenshots/8.png)
 ## Project Folder Structure
